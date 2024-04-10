@@ -36,26 +36,9 @@ const UserSchema  = new mongoose.Schema({
       message: (props) => (`${props.value} is not a valid email address!`)
     }
   }
-});
+},{timestamps:true});
 
-const UserModel = mongoose.model('UserModel',UserSchema);
+const UserModel = mongoose.model('user_model',UserSchema);
 
-const MessageSchema = new mongoose.Schema({
-  sender:{
-    type: mongoose.Schema.Types.ObjectId,
-    require:true
-  },
-  reciever:{
-    type: mongoose.Schema.Types.ObjectId,
-    require:true
-  },
-  chat:{
-    type:String,
-    require:true
-  }
-},{
-  timestamps:true
-});
 
-const MessageModel = mongoose.model('MessageModel',MessageSchema);
-export default {UserSchema,UserModel,MessageModel,MessageSchema};
+export default {UserSchema,UserModel};

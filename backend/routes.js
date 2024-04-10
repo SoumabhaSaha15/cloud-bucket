@@ -16,8 +16,9 @@ const ROUTES = {
      * @param {express.Response} response 
      */
     authentication:async (request,response)=>{
+      
       console.log(request.body);
-      console.table(request.files);
+      console.dir(request.files);
       response.send({'data':'response sent'});  
     },
     /**

@@ -1,10 +1,11 @@
 import React from "react";
 import * as CUI from "@chakra-ui/react";
 import IonIcon from '@reacticons/ionicons';
+import * as CustomTypes from '../CustomTypes/types'
 const UserAuthentication:React.FC<React.PropsWithChildren> = () => {
   const bgColor='#808080';
-  const [form_type,set_form_type] =  React.useState<{formName:('SignUp'|'LogIn'),
-  spanText:('Already have an account '|"Don't have an account "),display:('flex'|'none'),height:('450px'|'225px'),
+  const [form_type,set_form_type] =  React.useState<{formName:CustomTypes.SignUpOrLogin,
+  spanText:CustomTypes.AuthFormSpanText,display:('flex'|'none'),height:('450px'|'225px'),
   required:boolean}>({
     formName:'SignUp',
     spanText:'Already have an account ',
@@ -12,23 +13,19 @@ const UserAuthentication:React.FC<React.PropsWithChildren> = () => {
     height:'450px',
     required:true
   });
-  const invert_form_name = (str:('SignUp'|'LogIn')):('SignUp'|'LogIn')=>{
+  const invert_form_name = (str:CustomTypes.SignUpOrLogin):CustomTypes.SignUpOrLogin=>{
     return (str == 'LogIn')?('SignUp'):('LogIn');
   }
-  const invert_span_text = (str:('Already have an account '|"Don't have an account ")):('Already have an account '|"Don't have an account ")=>{
+  const invert_span_text = (str:CustomTypes.AuthFormSpanText):CustomTypes.AuthFormSpanText=>{
     return (str == 'Already have an account ')?("Don't have an account "):("Already have an account ");
   }
-  const [fieldName,setFieldName] = React.useState<{ProfilePictureName:'ProfilePicture',UserName:'UserName'}|{ProfilePictureName:'',UserName:''}>({
+  const [fieldName,setFieldName] = React.useState<CustomTypes.SignUpOnlyFiledNames>({
     ProfilePictureName:'ProfilePicture',
     UserName:'UserName'
   });
   const [DP,set_DP] = React.useState<string>('./../src/assets/user.svg');
   const [passwordVisibility,setPasswordVisibility] = React.useState<{IconName:'eye-sharp',InputType:'password'}|{IconName:'eye-off-sharp',InputType:'text'}>({IconName:'eye-sharp',InputType:'password'});
-  const [userData,setUserData] = React.useState({
-    UserName:'',
-    Password:'',
-    Email:''    
-  });
+  
   return (
   <form 
     style={{
@@ -74,13 +71,16 @@ const UserAuthentication:React.FC<React.PropsWithChildren> = () => {
         </CUI.Tooltip>
       </label>
       <CUI.InputGroup size='lg' style={{display:form_type.display}}>
-        <CUI.InputLeftAddon children={<IonIcon name="person-circle-outline"/>} style={{
+        <CUI.InputLeftAddon children={<IonIcon style={{
+            fontSize:'x-large',
+            fontWeight:'900'
+          }} 
+          name="person-circle-outline"/>} style={{
           borderColor:bgColor,
           backgroundColor:bgColor
         }}/>
         <CUI.Input 
-        type="text" 
-        value={userData.UserName} 
+        type="text"
         placeholder="Your name" 
         variant='outline' 
         style={{
@@ -88,20 +88,21 @@ const UserAuthentication:React.FC<React.PropsWithChildren> = () => {
         }}
         name={fieldName.UserName}
         isRequired={form_type.required} 
-        onChange={(e)=>{
-          setUserData(v=>({...v,UserName:e.target.value}))
-        }}/>
+        pattern="^[a-zA-Z ]{2,}$"
+        />
       </CUI.InputGroup>
       <CUI.InputGroup size='lg'>
         <CUI.InputLeftAddon 
-        children={<IonIcon name="mail-open-outline" style={{fontSize:'large'}}/>} 
+          children={<IonIcon name="mail-open-outline" style={{
+            fontSize:'x-large',
+            fontWeight:'900'
+          }}/>} 
         style={{
           backgroundColor:bgColor,
           borderColor:bgColor
         }}/>
         <CUI.Input 
-        type="email" 
-        value={userData.Email} 
+        type="email"
         placeholder="enter email" 
         variant='outline' 
         required 
@@ -109,31 +110,31 @@ const UserAuthentication:React.FC<React.PropsWithChildren> = () => {
           borderColor:bgColor
         }}
         name={'Email'}
-        onChange={(e)=>{
-          setUserData(v=>({...v,Email:e.target.value}))
-        }}
         />
       </CUI.InputGroup>
       <CUI.InputGroup size='lg'>
         <CUI.InputLeftAddon 
-        children={<IonIcon name="lock-closed"/>} 
+        children={<IonIcon name="lock-closed"
+        style={{
+          fontSize:'x-large',
+          fontWeight:'900'
+        }}
+        />} 
         style={{
           backgroundColor:bgColor,
           borderColor:bgColor,
         }} />
         <CUI.Input 
         placeholder="enter password" 
-        type={passwordVisibility.InputType} 
-        value={userData.Password} 
+        type={passwordVisibility.InputType}
         variant='outline'
         name={'Password'} 
         required 
+        pattern="^[a-zA-Z0-9!@#$%^&*]{8,16}$"
         style={{
           borderColor:bgColor
         }} 
-        onChange={(e)=>{
-          setUserData(v=>({...v,Password:e.target.value}))
-        }}/>
+        />
         <CUI.InputRightElement 
         children={<IonIcon name={passwordVisibility.IconName} />}  
         onClick={()=>{
