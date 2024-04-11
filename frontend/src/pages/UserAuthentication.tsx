@@ -24,7 +24,7 @@ const UserAuthentication:React.FC<React.PropsWithChildren> = () => {
     UserName:'UserName'
   });
   const [DP,set_DP] = React.useState<string>('./../src/assets/user.svg');
-  const [passwordVisibility,setPasswordVisibility] = React.useState<{IconName:'eye-sharp',InputType:'password'}|{IconName:'eye-off-sharp',InputType:'text'}>({IconName:'eye-sharp',InputType:'password'});
+  const [passwordVisibility,setPasswordVisibility] = React.useState<CustomTypes.PASSWORD_VISIBLE_OR_NOT>({IconName:'eye-sharp',InputType:'password'});
   
   return (
   <form 
@@ -50,11 +50,11 @@ const UserAuthentication:React.FC<React.PropsWithChildren> = () => {
     <CUI.Stack style={{
       alignItems:'center'
     }}>
-      <label htmlFor="DP">
+      <CUI.FormLabel htmlFor="DP" >
         <CUI.Tooltip 
         fontSize='md'
         label={'profile picture'}
-        color={'black'}
+        color="black"
         borderRadius={'10px'}
         bgColor={bgColor}
         >
@@ -69,7 +69,7 @@ const UserAuthentication:React.FC<React.PropsWithChildren> = () => {
           }}
           />
         </CUI.Tooltip>
-      </label>
+      </CUI.FormLabel>
       <CUI.InputGroup size='lg' style={{display:form_type.display}}>
         <CUI.InputLeftAddon children={<IonIcon style={{
             fontSize:'x-large',
@@ -146,7 +146,7 @@ const UserAuthentication:React.FC<React.PropsWithChildren> = () => {
       </CUI.InputGroup>
       <CUI.Input 
       type="file" 
-      accept="png,jpg" 
+      accept=".png,.jpg" 
       required={form_type.required} 
       name={fieldName.ProfilePictureName}
       style={{
@@ -188,7 +188,8 @@ const UserAuthentication:React.FC<React.PropsWithChildren> = () => {
       <CUI.Button 
       type="submit" 
       style={{
-        backgroundColor:bgColor
+        backgroundColor:bgColor,
+        width:'90%'
       }} 
       _hover={{
         boxShadow:'2px 2px 4px #404040, -2px -2px 4px #404040, -2px 2px 4px #404040, 2px -2px 4px #404040'

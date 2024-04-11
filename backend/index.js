@@ -29,6 +29,7 @@ const __dirname = path.dirname(__filename);
     APP.post('/api/settings', routes.POST.settings);
 
     APP.listen(process.env.PORT, () => {
+      console.clear();
       console.log(`http://localhost:${process.env.PORT}`);
     });
   }

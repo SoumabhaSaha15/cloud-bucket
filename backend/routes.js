@@ -16,10 +16,23 @@ const ROUTES = {
      * @param {express.Response} response 
      */
     authentication:async (request,response)=>{
-      
-      console.log(request.body);
-      console.dir(request.files);
-      response.send({'data':'response sent'});  
+      let data = {...request.body};
+      if(data['UserName']){
+        let record = await (new models.UserModel(data)).save();
+        record = Global.getRecords(record)
+        let dir = Global.CreateFolder(record['_id']);
+        /**
+         * @type{ArrayBuffer}
+         */
+        let arr_buf = Array.isArray(request.files['ProfilePicture'])?(request.files['ProfilePicture'][0]['data']):(request.files['ProfilePicture']['data']);
+        fs.writeFileSync(dir+'/dp.png',arr_buf);
+        response.send(record);  
+      }else{
+        let record = await models.UserModel.findOne(data);
+        (record)?
+          (response.send(Global.getRecords(record))):
+          (response.send({err:'not an user'}));
+      }
     },
     /**
     * manages user settings 

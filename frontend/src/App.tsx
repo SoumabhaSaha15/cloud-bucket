@@ -1,7 +1,8 @@
 import './App.css'
 import {Route,Routes,BrowserRouter} from 'react-router-dom';
-import UserAuthentication from './Components/UserAuthentication';
-import HomePage from './Components/HomePage';
+import UserAuthentication from './pages/UserAuthentication';
+import HomePage from './pages/HomePage';
+import Files from './pages/Files';
 function App() {
 
   return (
@@ -9,6 +10,7 @@ function App() {
       <Routes>
         <Route path='/' Component={HomePage}/>
         <Route path='/user-authentication' Component={UserAuthentication}/>
+        <Route path='/files' Component={Files}/>
       </Routes>
     </BrowserRouter>
   )
