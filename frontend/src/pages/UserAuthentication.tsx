@@ -71,14 +71,20 @@ const UserAuthentication:React.FC<React.PropsWithChildren> = () => {
         </CUI.Tooltip>
       </CUI.FormLabel>
       <CUI.InputGroup size='lg' style={{display:form_type.display}}>
-        <CUI.InputLeftAddon children={<IonIcon style={{
-            fontSize:'x-large',
-            fontWeight:'900'
-          }} 
-          name="person-circle-outline"/>} style={{
-          borderColor:bgColor,
-          backgroundColor:bgColor
-        }}/>
+        <CUI.InputLeftAddon 
+          children={<IonIcon 
+            style={{
+              fontSize:'x-large',
+              fontWeight:'900'
+            }} 
+            name="person-circle-outline"
+          />
+          }
+          bg="purple.500" 
+          style={{
+            borderColor:bgColor,
+          }}
+        />
         <CUI.Input 
         type="text"
         placeholder="Your name" 
@@ -93,14 +99,18 @@ const UserAuthentication:React.FC<React.PropsWithChildren> = () => {
       </CUI.InputGroup>
       <CUI.InputGroup size='lg'>
         <CUI.InputLeftAddon 
-          children={<IonIcon name="mail-open-outline" style={{
-            fontSize:'x-large',
-            fontWeight:'900'
-          }}/>} 
-        style={{
-          backgroundColor:bgColor,
-          borderColor:bgColor
-        }}/>
+          children={<IonIcon 
+            name="mail-open-outline" 
+            style={{
+              fontSize:'x-large',
+              fontWeight:'900'
+            }}
+          />}
+          bg="purple.500" 
+          style={{
+            borderColor:bgColor
+          }}
+        />
         <CUI.Input 
         type="email"
         placeholder="enter email" 
@@ -114,16 +124,18 @@ const UserAuthentication:React.FC<React.PropsWithChildren> = () => {
       </CUI.InputGroup>
       <CUI.InputGroup size='lg'>
         <CUI.InputLeftAddon 
-        children={<IonIcon name="lock-closed"
-        style={{
-          fontSize:'x-large',
-          fontWeight:'900'
-        }}
-        />} 
-        style={{
-          backgroundColor:bgColor,
-          borderColor:bgColor,
-        }} />
+          children={<IonIcon 
+              name="lock-closed"
+              style={{
+                fontSize:'x-large',
+                fontWeight:'900'
+              }}
+            />} 
+          bg="purple.500"
+          style={{
+            borderColor:bgColor,
+          }} 
+        />
         <CUI.Input 
         placeholder="enter password" 
         type={passwordVisibility.InputType}
@@ -185,18 +197,17 @@ const UserAuthentication:React.FC<React.PropsWithChildren> = () => {
           );
         }}>{invert_form_name(form_type.formName)}</a>
       </span>
-      <CUI.Button 
-      type="submit" 
-      style={{
-        backgroundColor:bgColor,
-        width:'90%'
-      }} 
-      _hover={{
-        boxShadow:'2px 2px 4px #404040, -2px -2px 4px #404040, -2px 2px 4px #404040, 2px -2px 4px #404040'
-      }}
-      >
-        {form_type.formName}
-      </CUI.Button>
+      <CUI.Button
+        bg={"purple.500"} 
+        type="submit" 
+        style={{
+          width:'90%'
+        }} 
+        _hover={{
+          boxShadow:'2px 2px 4px #805ad580, -2px -2px 4px #805ad580, -2px 2px 4px #805ad580, 2px -2px 4px #805ad580'
+        }}
+        children={form_type.formName}
+      />
     </CUI.Stack>
   </form>
   )

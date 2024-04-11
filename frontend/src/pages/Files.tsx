@@ -1,6 +1,7 @@
 import React from "react";
-import {Box,Grid,Heading,Stack,HStack,Spacer, Flex, Avatar, Tooltip,Tabs,Tab,TabList,TabPanels,TabPanel,Popover,PopoverArrow,PopoverBody,PopoverContent,PopoverTrigger, Button} from  "@chakra-ui/react";
-
+import IonIcon from '@reacticons/ionicons';
+import * as CUI from  "@chakra-ui/react";
+import File from "../Components/File";
 const Files:React.FC = () => {
   const [Width,SetWidth] = React.useState<string>(window.innerWidth.toString()+'px');
   window.onresize=()=>{
@@ -8,113 +9,94 @@ const Files:React.FC = () => {
   }
   return (
   <>
-  <Stack w={Width}  overflow={'hidden'}>
-    <Flex
-      maxHeight={'10vh'}  
+  <CUI.Stack 
+    w={Width}  
+    overflow={'hidden'}
+    gap={'0'}  
+  >
+    <CUI.Flex
+      height={'8vh'}  
       minWidth={'100%'} 
       padding={'10px'}
       boxSizing={'border-box'}
       bg={"purple.500"}
+      gap={'0'}
       alignItems={'center'}
     >
-      <Heading 
-        children={'Cloud_Bucket'} 
-        as="h2"
+      <CUI.Avatar 
+        src={'./../src/assets/react.svg'} 
+        style={{maxHeight:'100%'}} 
+        maxHeight={'6vh'}
+        maxWidth={'6vh'}
+        aspectRatio={'1/1'}
       />
-      <Spacer/>
-      <HStack spacing={'10px'} alignItems={'center'}>
-        <Tooltip label = {'sage-adebayo'}>
-          <Popover>
-            <PopoverTrigger>
-              <Avatar src='https://bit.ly/sage-adebayo'/>
-            </PopoverTrigger>
-            <PopoverContent borderRadius={'10px'}>
-              <PopoverArrow />
-              <PopoverBody 
-                bg='purple.300' 
-                borderRadius={'10px'}
-                children={
-                <Button 
-                  children={'go to account Settings'}
-                />}
+      <CUI.Spacer/>
+      <CUI.HStack spacing={'10px'} alignItems={'center'}>
+        <CUI.Tooltip label = {'sage-adebayo'}>
+          <CUI.Popover>
+            <CUI.PopoverTrigger>
+              <CUI.Avatar 
+                maxHeight={'6vh'} 
+                maxWidth={'6vh'}
+                aspectRatio={'1/1'} 
+                src='https://bit.ly/sage-adebayo'
               />
-            </PopoverContent>
-          </Popover>
-        </Tooltip>
-      </HStack>  
-    </Flex>
-    <Tabs  variant='line' colorScheme="purple">
-      <TabList height={'5vh'}>
-        <Tab fontWeight={'700'}>{'One'}</Tab>
-        <Tab>{'Two'}</Tab>
-        <Tab>{'three'}</Tab>
-      </TabList>
+            </CUI.PopoverTrigger>
+            <CUI.PopoverContent borderRadius={'10px'}>
+              <CUI.PopoverArrow bg={'purple.500'}/>
+              <CUI.PopoverBody 
+                bg='purple.500' 
+                borderRadius={'10px'}
+              >
+                <CUI.Button leftIcon={<IonIcon name='settings'/>} children={'go to account Settings'}/>
+              </CUI.PopoverBody>
+            </CUI.PopoverContent>
+          </CUI.Popover>
+        </CUI.Tooltip>
+      </CUI.HStack>  
+    </CUI.Flex>
+    <CUI.Tabs  variant='line' colorScheme="purple">
+      <CUI.TabList height={'5vh'}>
+        <CUI.Tab fontWeight={'700'} children={'one'}/>
+        <CUI.Tab fontWeight={'700'} children={'two'}/>
+        <CUI.Tab fontWeight={'700'} children={'three'}/>
+      </CUI.TabList>
 
-      <TabPanels>
-        <TabPanel>
-          <Grid 
-            h={'80vh'}
+      <CUI.TabPanels h={'87vh'}>
+        <CUI.TabPanel>
+          <CUI.Grid 
             templateColumns={'repeat(auto-fill,min(320px,90%))'}
             autoRows={'250px'}
             style={{width:'100%',overflow:'auto'}}
             gap={'10px'}
             justifyContent={'space-evenly'}
-          >
-            <Box children={'hello'} border={'1px solid red'}/>
-            <Box children={'hello'} border={'1px solid red'}/>
-            <Box children={'hello'} border={'1px solid red'}/>
-            <Box children={'hello'} border={'1px solid red'}/>
-            <Box children={'hello'} border={'1px solid red'}/>
-            <Box children={'hello'} border={'1px solid red'}/>
-            <Box children={'hello'} border={'1px solid red'}/>
-            <Box children={'hello'} border={'1px solid red'}/>
-
-          </Grid>
-        </TabPanel>
-        <TabPanel>
-        <Grid 
-            h={'80vh'}
+            children = {[1,2,3,4].map(item=>item.toString()).map(item=><File text={item}/>)}
+          />
+        </CUI.TabPanel>
+        <CUI.TabPanel h="85vh">
+        <CUI.Grid 
             templateColumns={'repeat(auto-fill,min(320px,90%))'}
             autoRows={'250px'}
             style={{width:'100%',overflow:'auto'}}
             gap={'10px'}
             justifyContent={'space-evenly'}
-          >
-            <Box children={'hello2'} border={'1px solid red'} textAlign={'center'}/>
-            <Box children={'hello'} border={'1px solid red'}/>
-            <Box children={'hello'} border={'1px solid red'}/>
-            <Box children={'hello2'} border={'1px solid red'}/>
-            <Box children={'hello2'} border={'1px solid red'}/>
-            <Box children={'hello'} border={'1px solid red'}/>
-            <Box children={'hello'} border={'1px solid red'}/>
-            <Box children={'hello2'} border={'1px solid red'}/>
-
-          </Grid>
-        </TabPanel>
-        <TabPanel>
-        <Grid 
-            h={'80vh'}
+            children = {[5,6,7,8].map(item=>item.toString()).map(item=><File text={item}/>)}
+          />
+            
+        </CUI.TabPanel>
+        <CUI.TabPanel  h="85vh">
+        <CUI.Grid 
             templateColumns={'repeat(auto-fill,min(320px,90%))'}
             autoRows={'250px'}
             style={{width:'100%',overflow:'auto'}}
             gap={'10px'}
             justifyContent={'space-evenly'}
-          >
-            <Box children={'hello3'} border={'1px solid red'}/>
-            <Box children={'hello'} border={'1px solid red'}/>
-            <Box children={'hello'} border={'1px solid red'}/>
-            <Box children={'hello3'} border={'1px solid red'}/>
-            <Box children={'hello3'} border={'1px solid red'}/>
-            <Box children={'hello'} border={'1px solid red'}/>
-            <Box children={'hello'} border={'1px solid red'}/>
-            <Box children={'hello3'} border={'1px solid red'}/>
-
-          </Grid>
-        </TabPanel>
-      </TabPanels>
-    </Tabs>
-    
-  </Stack>
+            children = {[9,10,11,12].map(item=>item.toString()).map(item=><File text={item}/>)}
+          />
+        </CUI.TabPanel>
+      </CUI.TabPanels>
+    </CUI.Tabs>
+  </CUI.Stack>
   </>
   );
 }
