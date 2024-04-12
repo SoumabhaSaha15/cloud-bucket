@@ -6,13 +6,13 @@ import Files from './pages/Files';
 function App() {
 
   return (
-    <BrowserRouter>
-      <Routes>
-        <Route path='/' Component={HomePage}/>
-        <Route path='/user-authentication' Component={UserAuthentication}/>
-        <Route path='/files' Component={Files}/>
-      </Routes>
-    </BrowserRouter>
+      <BrowserRouter>
+        <Routes>
+          <Route path='/' Component={HomePage}/>
+          <Route path='/user-authentication' Component={UserAuthentication}/>
+          <Route path='/files' Component={Files}/>
+        </Routes>
+      </BrowserRouter>
   )
 }
 

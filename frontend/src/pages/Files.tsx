@@ -2,6 +2,8 @@ import React from "react";
 import IonIcon from '@reacticons/ionicons';
 import * as CUI from  "@chakra-ui/react";
 import File from "../Components/File";
+// import { HTML5Backend } from "react-dnd-html5-backend";
+// import * as DND from 'react-dnd'
 const Files:React.FC = () => {
   const [Width,SetWidth] = React.useState<string>(window.innerWidth.toString()+'px');
   window.onresize=()=>{
@@ -55,46 +57,75 @@ const Files:React.FC = () => {
         </CUI.Tooltip>
       </CUI.HStack>  
     </CUI.Flex>
-    <CUI.Tabs  variant='line' colorScheme="purple">
-      <CUI.TabList height={'5vh'}>
-        <CUI.Tab fontWeight={'700'} children={'one'}/>
-        <CUI.Tab fontWeight={'700'} children={'two'}/>
-        <CUI.Tab fontWeight={'700'} children={'three'}/>
-      </CUI.TabList>
+    <CUI.Tabs  
+        variant='line'
+        colorScheme="purple"
+    >
+        <CUI.TabList height={'5vh'}>
+          <CUI.Tab fontWeight={'700'} children={'one'}/>
+          <CUI.Tab fontWeight={'700'} children={'two'}/>
+          <CUI.Tab fontWeight={'700'} children={'three'}/>
+        </CUI.TabList>
 
-      <CUI.TabPanels h={'87vh'}>
-        <CUI.TabPanel>
+        <CUI.TabPanels h={'87vh'} overflow={'auto'}>
+          <CUI.TabPanel>
+            <CUI.Grid 
+              templateColumns={'repeat(auto-fill,min(320px,90%))'}
+              autoRows={'250px'}
+              style={{width:'100%'}}
+              gap={'10px'}
+              
+              justifyContent={'space-evenly'}
+              children = {[1,2,3,4].map(item=>item.toString()).map((item)=><File text={item} key={crypto.randomUUID()} />)}
+            />
+          </CUI.TabPanel>
+          <CUI.TabPanel h="85vh">
           <CUI.Grid 
-            templateColumns={'repeat(auto-fill,min(320px,90%))'}
-            autoRows={'250px'}
-            style={{width:'100%',overflow:'auto'}}
-            gap={'10px'}
-            justifyContent={'space-evenly'}
-            children = {[1,2,3,4].map(item=>item.toString()).map(item=><File text={item}/>)}
+              templateColumns={'repeat(auto-fill,min(320px,90%))'}
+              autoRows={'250px'}
+              style={{width:'100%',overflow:'auto'}}
+              gap={'10px'}
+              justifyContent={'space-evenly'}
+              children = {[5,6,7,8].map(item=>item.toString()).map(item=><File text={item} key={crypto.randomUUID()}/>)}
+            />
+              
+          </CUI.TabPanel>
+          <CUI.TabPanel  h="85vh">
+          <CUI.Grid 
+              templateColumns={'repeat(auto-fill,min(320px,90%))'}
+              autoRows={'250px'}
+              style={{width:'100%',overflow:'auto'}}
+              gap={'10px'}
+              justifyContent={'space-evenly'}
+              children = {[9,10,11,12].map(item=>item.toString()).map(item=><File text={item} key={crypto.randomUUID()}/>)}
+            />
+          </CUI.TabPanel>
+        </CUI.TabPanels>
+        <CUI.Input 
+          type="file" 
+          display={'none'} 
+          id="upload" 
+          onChange={e=>{
+            const files = [...e.target.files!];
+            files.forEach(item=>{console.log(item);});
+          }}
+          multiple={true}
+        />
+       
+          <CUI.Button
+            leftIcon={<IonIcon style={{fontWeight:'700'}} name="add-outline"/>}
+            bg='purple.500'
+            style={{
+              position:'absolute',
+              bottom:'20px',
+              right:'20px',
+              fontWeight:'700',
+              zIndex:'1'
+            }} 
+            _hover={{color:'#ffffff'}}
+            children={<label htmlFor="upload" children={'Add'} />}
           />
-        </CUI.TabPanel>
-        <CUI.TabPanel h="85vh">
-        <CUI.Grid 
-            templateColumns={'repeat(auto-fill,min(320px,90%))'}
-            autoRows={'250px'}
-            style={{width:'100%',overflow:'auto'}}
-            gap={'10px'}
-            justifyContent={'space-evenly'}
-            children = {[5,6,7,8].map(item=>item.toString()).map(item=><File text={item}/>)}
-          />
-            
-        </CUI.TabPanel>
-        <CUI.TabPanel  h="85vh">
-        <CUI.Grid 
-            templateColumns={'repeat(auto-fill,min(320px,90%))'}
-            autoRows={'250px'}
-            style={{width:'100%',overflow:'auto'}}
-            gap={'10px'}
-            justifyContent={'space-evenly'}
-            children = {[9,10,11,12].map(item=>item.toString()).map(item=><File text={item}/>)}
-          />
-        </CUI.TabPanel>
-      </CUI.TabPanels>
+          
     </CUI.Tabs>
   </CUI.Stack>
   </>
