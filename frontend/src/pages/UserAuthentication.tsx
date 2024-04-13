@@ -65,7 +65,8 @@ const UserAuthentication:React.FC<React.PropsWithChildren> = () => {
             maxWidth:'150px',
             height:'150px',
             aspectRatio:'1/1',
-            display:form_type.display
+            display:form_type.display,
+            border:'1px dashed #805ad5'
           }}
           />
         </CUI.Tooltip>
@@ -148,7 +149,7 @@ const UserAuthentication:React.FC<React.PropsWithChildren> = () => {
         }} 
         />
         <CUI.InputRightElement 
-        children={<IonIcon name={passwordVisibility.IconName} />}  
+        children={<IonIcon style={{color:"#805ad5"}} name={passwordVisibility.IconName} />}  
         onClick={()=>{
           setPasswordVisibility(v=>(
             (v.IconName==='eye-sharp' && v.InputType==='password')?

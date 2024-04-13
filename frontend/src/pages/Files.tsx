@@ -1,36 +1,38 @@
 import React from "react";
 import IonIcon from '@reacticons/ionicons';
 import * as CUI from  "@chakra-ui/react";
-import File from "../Components/File";
-import r,{ useDrop } from "react-dnd";
+import CustomFile from "../Components/CustomFile";
+import * as ReactDragAndDrop from "react-dnd";
 import { NativeTypes } from 'react-dnd-html5-backend';
 const Files:React.FC = () => {
-  window.onload=e=>{
+  window.addEventListener('load',()=>{
     console.clear();
-  }
+  });
   const [Width,SetWidth] = React.useState<string>(window.innerWidth.toString()+'px');
   window.onresize=()=>{
     SetWidth(window.innerWidth.toString()+'px');
   }
-  const [{ isOver, canDrop }, drop] = useDrop(() => ({
+  const toast = CUI.useToast(); 
+  const [{ isOver}, drop] = ReactDragAndDrop.useDrop(() => ({
     accept: [NativeTypes.FILE],
-    drop(item, monitor:r.DropTargetMonitor) {
+    drop(item, monitor) {
       if (monitor) {
-        let files:(FileList|null|Array<any>) = monitor.getItem<any>().files!;
+        const objs = monitor?.getItem();
         console.clear();
-        console.log(files,item,isOver,canDrop);
-        try{
-          files = [...files];
-          files.forEach(i=>{
-            console.log(i?.['name']);
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        objs?.files?.forEach((it)=>{
+          toast({
+            title:it?.name,
+            description: "file uploaded",
+            status: 'success',
+            duration: 3000,
+            isClosable: true,
           });
+        });
 
-        }catch(e){
-          console.log(e);
-        }
       }
     },
-    collect: (monitor:r.DropTargetMonitor) => ({
+    collect: (monitor) => ({
       isOver: monitor.isOver(),
       canDrop: monitor.canDrop(),
     }),
@@ -100,6 +102,7 @@ const Files:React.FC = () => {
           h={'87vh'} 
           overflow={'auto'}
           ref={drop}
+          opacity={isOver?"0.2":"1"}
         >
           <CUI.TabPanel>
             <CUI.Grid 
@@ -108,7 +111,7 @@ const Files:React.FC = () => {
               style={{width:'100%'}}
               gap={'10px'}
               justifyContent={'space-evenly'}
-              children = {[1,2,3,4].map(item=>item.toString()).map((item)=><File text={item} key={crypto.randomUUID()} />)}
+              children = {[1,2,3,4].map(item=>item.toString()).map((item)=><CustomFile text={item} key={crypto.randomUUID()} />)}
             />
           </CUI.TabPanel>
           <CUI.TabPanel h="85vh">
@@ -118,7 +121,7 @@ const Files:React.FC = () => {
               style={{width:'100%',overflow:'auto'}}
               gap={'10px'}
               justifyContent={'space-evenly'}
-              children = {[5,6,7,8].map(item=>item.toString()).map(item=><File text={item} key={crypto.randomUUID()}/>)}
+              children = {[5,6,7,8].map(item=>item.toString()).map(item=><CustomFile text={item} key={crypto.randomUUID()}/>)}
             />
               
           </CUI.TabPanel>
@@ -129,7 +132,7 @@ const Files:React.FC = () => {
               style={{width:'100%',overflow:'auto'}}
               gap={'10px'}
               justifyContent={'space-evenly'}
-              children = {[9,10,11,12].map(item=>item.toString()).map(item=><File text={item} key={crypto.randomUUID()}/>)}
+              children = {[9,10,11,12].map(item=>item.toString()).map(item=><CustomFile text={item} key={crypto.randomUUID()}/>)}
             />
           </CUI.TabPanel>
         </CUI.TabPanels>

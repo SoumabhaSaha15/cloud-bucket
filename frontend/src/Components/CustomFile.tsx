@@ -1,6 +1,6 @@
 import React from "react";
 import * as CUI from '@chakra-ui/react'
-const File:React.FC<{text:string}>=(props)=> {
+const CustomFile:React.FC<{text:string}>=(props)=> {
   // console.log(props)
   return (
     <>
@@ -13,4 +13,4 @@ const File:React.FC<{text:string}>=(props)=> {
     </>
   )
 }
-export default File;
+export default CustomFile;
