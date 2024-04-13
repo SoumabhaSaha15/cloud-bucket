@@ -2,13 +2,39 @@ import React from "react";
 import IonIcon from '@reacticons/ionicons';
 import * as CUI from  "@chakra-ui/react";
 import File from "../Components/File";
-// import { HTML5Backend } from "react-dnd-html5-backend";
-// import * as DND from 'react-dnd'
+import r,{ useDrop } from "react-dnd";
+import { NativeTypes } from 'react-dnd-html5-backend';
 const Files:React.FC = () => {
+  window.onload=e=>{
+    console.clear();
+  }
   const [Width,SetWidth] = React.useState<string>(window.innerWidth.toString()+'px');
   window.onresize=()=>{
     SetWidth(window.innerWidth.toString()+'px');
   }
+  const [{ isOver, canDrop }, drop] = useDrop(() => ({
+    accept: [NativeTypes.FILE],
+    drop(item, monitor:r.DropTargetMonitor) {
+      if (monitor) {
+        let files:(FileList|null|Array<any>) = monitor.getItem<any>().files!;
+        console.clear();
+        console.log(files,item,isOver,canDrop);
+        try{
+          files = [...files];
+          files.forEach(i=>{
+            console.log(i?.['name']);
+          });
+
+        }catch(e){
+          console.log(e);
+        }
+      }
+    },
+    collect: (monitor:r.DropTargetMonitor) => ({
+      isOver: monitor.isOver(),
+      canDrop: monitor.canDrop(),
+    }),
+  }));
   return (
   <>
   <CUI.Stack 
@@ -50,7 +76,10 @@ const Files:React.FC = () => {
                 bg='purple.500' 
                 borderRadius={'10px'}
               >
-                <CUI.Button leftIcon={<IonIcon name='settings'/>} children={'go to account Settings'}/>
+                <CUI.Button 
+                  leftIcon={<IonIcon name='settings'/>} 
+                  children={'go to account Settings'}
+                />
               </CUI.PopoverBody>
             </CUI.PopoverContent>
           </CUI.Popover>
@@ -67,14 +96,17 @@ const Files:React.FC = () => {
           <CUI.Tab fontWeight={'700'} children={'three'}/>
         </CUI.TabList>
 
-        <CUI.TabPanels h={'87vh'} overflow={'auto'}>
+        <CUI.TabPanels 
+          h={'87vh'} 
+          overflow={'auto'}
+          ref={drop}
+        >
           <CUI.TabPanel>
             <CUI.Grid 
               templateColumns={'repeat(auto-fill,min(320px,90%))'}
               autoRows={'250px'}
               style={{width:'100%'}}
               gap={'10px'}
-              
               justifyContent={'space-evenly'}
               children = {[1,2,3,4].map(item=>item.toString()).map((item)=><File text={item} key={crypto.randomUUID()} />)}
             />
