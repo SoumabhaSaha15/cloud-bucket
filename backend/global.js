@@ -28,7 +28,7 @@ const setObjectKeys = (keys,data) => {
  * @name parseJWT
  * @param {string} token 
  * @param {Object} obj 
- * @returns {string}
+ * @returns {string|null}
  */
 const parseJWT = (token,obj) => {
     try{

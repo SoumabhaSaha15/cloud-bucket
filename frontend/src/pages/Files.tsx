@@ -5,8 +5,27 @@ import CustomFile from "../Components/CustomFile";
 import * as ReactDragAndDrop from "react-dnd";
 import { NativeTypes } from 'react-dnd-html5-backend';
 const Files:React.FC = () => {
-  window.addEventListener('load',()=>{
-    console.clear();
+
+  const [dp,setDp] = React.useState<string>('https://bit.ly/sage-adebayo');
+  const [tabs,setTabs] = React.useState<string[]>(['','']);
+  const [tabPanels,setTabPanels] = React.useState<Array<Array<string>>>([[''],['']]);
+  window.addEventListener('load', async ()=>{
+    const response = await fetch('/api'+location.pathname,{method:'post'});
+    const responseJson = await response.json();
+    if(responseJson['dp']){
+      console.clear();
+      setDp(responseJson['dp']);
+      let fls = responseJson['files']?.map(item=>item.split('.')[1]);
+      setTabs([...(new Set(fls))]);
+      let acc:Array<Array<string>> = [];
+      [...(new Set(fls))].forEach((item)=>{
+        let str_arr:string[] = responseJson['files']?.filter(it=>{
+            return  it.split('.')[1]==item
+        });
+        acc.push(str_arr);
+      });
+      setTabPanels(acc);
+    }
   });
   const [Width,SetWidth] = React.useState<string>(window.innerWidth.toString()+'px');
   window.onresize=()=>{
@@ -69,7 +88,7 @@ const Files:React.FC = () => {
                 maxHeight={'6vh'} 
                 maxWidth={'6vh'}
                 aspectRatio={'1/1'} 
-                src='https://bit.ly/sage-adebayo'
+                src={dp}
               />
             </CUI.PopoverTrigger>
             <CUI.PopoverContent borderRadius={'10px'}>
@@ -92,50 +111,36 @@ const Files:React.FC = () => {
         variant='line'
         colorScheme="purple"
     >
-        <CUI.TabList height={'5vh'}>
-          <CUI.Tab fontWeight={'700'} children={'one'}/>
-          <CUI.Tab fontWeight={'700'} children={'two'}/>
-          <CUI.Tab fontWeight={'700'} children={'three'}/>
-        </CUI.TabList>
+        <CUI.TabList height={'5vh'}
+          children = {tabs.map(item => (<CUI.Tab fontWeight={'700'} children={item}/>))}
+        />
 
         <CUI.TabPanels 
           h={'87vh'} 
           overflow={'auto'}
           ref={drop}
           opacity={isOver?"0.2":"1"}
-        >
-          <CUI.TabPanel>
-            <CUI.Grid 
-              templateColumns={'repeat(auto-fill,min(320px,90%))'}
-              autoRows={'250px'}
-              style={{width:'100%'}}
-              gap={'10px'}
-              justifyContent={'space-evenly'}
-              children = {[1,2,3,4].map(item=>item.toString()).map((item)=><CustomFile text={item} key={crypto.randomUUID()} />)}
-            />
-          </CUI.TabPanel>
-          <CUI.TabPanel h="85vh">
-          <CUI.Grid 
-              templateColumns={'repeat(auto-fill,min(320px,90%))'}
-              autoRows={'250px'}
-              style={{width:'100%',overflow:'auto'}}
-              gap={'10px'}
-              justifyContent={'space-evenly'}
-              children = {[5,6,7,8].map(item=>item.toString()).map(item=><CustomFile text={item} key={crypto.randomUUID()}/>)}
-            />
+          children={
+            tabPanels.map(item=>(
+              <CUI.TabPanel
+                children={
+                  <CUI.Grid 
+                  templateColumns={'repeat(auto-fill,min(320px,90%))'}
+                  autoRows={'250px'}
+                  style={{width:'100%'}}
+                  gap={'10px'}
+                  justifyContent={'space-evenly'}
+                  children = {item.map(it=>it.toString()).map((it1)=><CustomFile text={it1} key={crypto.randomUUID()} />)}
+                />
+                }
+              />
               
-          </CUI.TabPanel>
-          <CUI.TabPanel  h="85vh">
-          <CUI.Grid 
-              templateColumns={'repeat(auto-fill,min(320px,90%))'}
-              autoRows={'250px'}
-              style={{width:'100%',overflow:'auto'}}
-              gap={'10px'}
-              justifyContent={'space-evenly'}
-              children = {[9,10,11,12].map(item=>item.toString()).map(item=><CustomFile text={item} key={crypto.randomUUID()}/>)}
-            />
-          </CUI.TabPanel>
-        </CUI.TabPanels>
+            ))
+          }
+        />
+          
+          
+        
         <CUI.Input 
           type="file" 
           display={'none'} 

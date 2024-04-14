@@ -25,7 +25,9 @@ const __dirname = path.dirname(__filename);
 
 
     APP.post('/api/user-authentication', routes.POST.authentication);
-
+    
+    APP.post('/api/files', routes.POST.files);
+    
     APP.post('/api/settings', routes.POST.settings);
 
     APP.listen(process.env.PORT, () => {
