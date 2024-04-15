@@ -45,8 +45,8 @@ const ROUTES = {
               record = Global.getRecords(record);
               delete record['Password'];
               let dir = `${__dirname}/public/client/${record['_id']}`
-              response.send({...Global.getRecords(record),'redirect':'files','dp':(dir+'/dp.png')});
               response.cookie("user_token",JWT.sign(record['_id'],process.env.SECRET_KEY),{httpOnly:true});
+              response.send({...Global.getRecords(record),'redirect':'files','dp':(dir+'/dp.png')});
             })():
             (response.send({err:'not an user'}));
         }

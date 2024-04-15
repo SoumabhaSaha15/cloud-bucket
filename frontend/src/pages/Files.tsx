@@ -2,16 +2,14 @@ import React from "react";
 import IonIcon from '@reacticons/ionicons';
 import * as CUI from  "@chakra-ui/react";
 import CustomFile from "../Components/CustomFile";
-import * as ReactDragAndDrop from "react-dnd";
-import { NativeTypes } from 'react-dnd-html5-backend';
+import {useDropzone} from 'react-dropzone'
 const Files:React.FC = () => {
 
   const [dp,setDp] = React.useState<string>('https://bit.ly/sage-adebayo');
   const [tabs,setTabs] = React.useState<string[]>(['','']);
   const [tabPanels,setTabPanels] = React.useState<Array<Array<string>>>([[''],['']]);
   window.addEventListener('load', async ()=>{
-    const response = await fetch('/api'+location.pathname,{method:'post'});
-    const responseJson = await response.json();
+    const responseJson = await fetch('/api'+location.pathname,{method:'post'}).then(res=>res.json());
     if(responseJson['dp']){
       console.clear();
       setDp(responseJson['dp']);
@@ -27,35 +25,26 @@ const Files:React.FC = () => {
       setTabPanels(acc);
     }
   });
+  
   const [Width,SetWidth] = React.useState<string>(window.innerWidth.toString()+'px');
   window.onresize=()=>{
     SetWidth(window.innerWidth.toString()+'px');
   }
   const toast = CUI.useToast(); 
-  const [{ isOver}, drop] = ReactDragAndDrop.useDrop(() => ({
-    accept: [NativeTypes.FILE],
-    drop(item, monitor) {
-      if (monitor) {
-        const objs = monitor?.getItem();
-        console.clear();
-        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-        objs?.files?.forEach((it)=>{
-          toast({
-            title:it?.name,
-            description: "file uploaded",
-            status: 'success',
-            duration: 3000,
-            isClosable: true,
-          });
-        });
-
-      }
-    },
-    collect: (monitor) => ({
-      isOver: monitor.isOver(),
-      canDrop: monitor.canDrop(),
-    }),
-  }));
+  const onDrop = React.useCallback((acceptedFiles:Array<File>)=>{
+    console.log(acceptedFiles);
+    acceptedFiles.forEach(item=>{
+      toast({
+        title: 'item added',
+        description: item.name,
+        status: 'success',
+        duration: 3000,
+        isClosable: true,
+        id:crypto.randomUUID()
+      });
+    })
+  },[]);
+  const {getRootProps,getInputProps,isDragActive} = useDropzone({onDrop});
   return (
   <>
   <CUI.Stack 
@@ -118,8 +107,12 @@ const Files:React.FC = () => {
         <CUI.TabPanels 
           h={'87vh'} 
           overflow={'auto'}
-          ref={drop}
-          opacity={isOver?"0.2":"1"}
+          {...getRootProps()}
+          onClick={e=>{
+            e.preventDefault();
+          }}
+          
+          filter={isDragActive?"blur(5px)":"blur(0px)"}
           children={
             tabPanels.map(item=>(
               <CUI.TabPanel
@@ -142,14 +135,9 @@ const Files:React.FC = () => {
           
         
         <CUI.Input 
-          type="file" 
-          display={'none'} 
-          id="upload" 
-          onChange={e=>{
-            const files = [...e.target.files!];
-            files.forEach(item=>{console.log(item);});
-          }}
-          multiple={true}
+          {...getInputProps()}
+          id="upload"
+          size={''}
         />
        
           <CUI.Button
