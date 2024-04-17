@@ -3,6 +3,7 @@ import IonIcon from '@reacticons/ionicons';
 import * as CUI from  "@chakra-ui/react";
 import CustomFile from "../Components/CustomFile";
 import {useDropzone} from 'react-dropzone'
+import CustomHeader from "../Components/CustomHeader";
 const Files:React.FC = () => {
 
   const [dp,setDp] = React.useState<string>('https://bit.ly/sage-adebayo');
@@ -60,48 +61,14 @@ const Files:React.FC = () => {
       bg={"purple.500"}
       gap={'0'}
       alignItems={'center'}
-    >
-      <CUI.Avatar 
-        src={'./../src/assets/react.svg'} 
-        style={{maxHeight:'100%'}} 
-        maxHeight={'6vh'}
-        maxWidth={'6vh'}
-        aspectRatio={'1/1'}
-      />
-      <CUI.Spacer/>
-      <CUI.HStack spacing={'10px'} alignItems={'center'}>
-        <CUI.Tooltip label = {'sage-adebayo'}>
-          <CUI.Popover>
-            <CUI.PopoverTrigger>
-              <CUI.Avatar 
-                maxHeight={'6vh'} 
-                maxWidth={'6vh'}
-                aspectRatio={'1/1'} 
-                src={dp}
-              />
-            </CUI.PopoverTrigger>
-            <CUI.PopoverContent borderRadius={'10px'}>
-              <CUI.PopoverArrow bg={'purple.500'}/>
-              <CUI.PopoverBody 
-                bg='purple.500' 
-                borderRadius={'10px'}
-              >
-                <CUI.Button 
-                  leftIcon={<IonIcon name='settings'/>} 
-                  children={'go to account Settings'}
-                />
-              </CUI.PopoverBody>
-            </CUI.PopoverContent>
-          </CUI.Popover>
-        </CUI.Tooltip>
-      </CUI.HStack>  
-    </CUI.Flex>
+      children={<CustomHeader link={dp}/>}
+    />
     <CUI.Tabs  
         variant='line'
         colorScheme="purple"
     >
         <CUI.TabList height={'5vh'}
-          children = {tabs.map(item => (<CUI.Tab fontWeight={'700'} children={item}/>))}
+          children = {tabs.map(item => (<CUI.Tab key={crypto.randomUUID()} fontWeight={'700'} children={item}/>))}
         />
 
         <CUI.TabPanels 
@@ -116,6 +83,7 @@ const Files:React.FC = () => {
           children={
             tabPanels.map(item=>(
               <CUI.TabPanel
+                key={crypto.randomUUID()}
                 children={
                   <CUI.Grid 
                   templateColumns={'repeat(auto-fill,min(320px,90%))'}
@@ -123,7 +91,7 @@ const Files:React.FC = () => {
                   style={{width:'100%'}}
                   gap={'10px'}
                   justifyContent={'space-evenly'}
-                  children = {item.map(it=>it.toString()).map((it1)=><CustomFile text={it1} key={crypto.randomUUID()} />)}
+                  children = {item.map(it=>it.toString()).map((it1)=><CustomFile link={it1} key={crypto.randomUUID()} />)}
                 />
                 }
               />
