@@ -36,7 +36,7 @@ const ROUTES = {
           
           fs.writeFileSync(dir+'/dp.png',arr_buf);
           fs.mkdirSync(dir+'/files');
-          response.send({...record,'dp':(dir+'/dp.png'),'redirect':'files'});  
+          response.send({'redirect':'files'});  
   
         }else{
           let record = await models.UserModel.findOne(data);
@@ -46,13 +46,13 @@ const ROUTES = {
               delete record['Password'];
               let dir = `${__dirname}/public/client/${record['_id']}`
               response.cookie("user_token",JWT.sign(record['_id'],process.env.SECRET_KEY),{httpOnly:true});
-              response.send({...Global.getRecords(record),'redirect':'files','dp':(dir+'/dp.png')});
+              response.send({'redirect':'files'});
             })():
-            (response.send({err:'not an user'}));
+            (()=>{throw new Error('invalid user credentils')})();
         }
         
       }catch(err){
-        response.send({'err':err?.message})
+        response.send({err_msg:err?.message})
       }
     },
     /**
@@ -61,21 +61,27 @@ const ROUTES = {
     * @param {express.Response} response 
     */
     files:async(request,response)=>{
-      if(request.cookies['user_token']){
-        let id =  Global.parseJWT('user_token',request.cookies);
-        if(id){
-          let  rec = Global.getRecords(await models.UserModel.findById(id));
-          if(rec){
-            let files = fs.readdirSync( `${__dirname}/public/client/${rec['_id']}/files`).map(item => (`http://localhost:${process.env.PORT}/client/${rec['_id']}/files/${item}`));
-            let dp = `http://localhost:${process.env.PORT}/client/${rec['_id']}/dp.png`;
-            response.send({'files':files,...rec,'dp':dp});
+      try{
+        if(request.cookies['user_token']){
+          let id =  Global.parseJWT('user_token',request.cookies);
+          if(id){
+            let  rec = Global.getRecords(await models.UserModel.findById(id));
+            if(rec){
+              let files = Global.getFiles(rec['_id']);
+              let dp = (`http://localhost:${process.env.PORT}/client/${rec['_id']}/dp.png`);
+              response.send({'files':files,'dp':dp});
+            }else{
+              throw new Error('user not logged in');
+            }
           }else{
-
+            throw new Error('user not loggged in');
           }
+        }else{
+          throw new Error('user not loggged in');
         }
 
-      }else{
-        response.send({err:'not logged in ',redirect:'user-authentication'})
+      }catch(e){
+        response.send({err_msg:e.message});
       }
     },
     /**

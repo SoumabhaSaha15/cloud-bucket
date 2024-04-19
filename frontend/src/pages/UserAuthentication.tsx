@@ -25,7 +25,7 @@ const UserAuthentication:React.FC<React.PropsWithChildren> = () => {
   });
   const [DP,set_DP] = React.useState<string>('./../src/assets/user.svg');
   const [passwordVisibility,setPasswordVisibility] = React.useState<CustomTypes.PASSWORD_VISIBLE_OR_NOT>({IconName:'eye-sharp',InputType:'password'});
-  
+  const toast = CUI.useToast();
   return (
   <form 
     style={{
@@ -40,9 +40,20 @@ const UserAuthentication:React.FC<React.PropsWithChildren> = () => {
     onSubmit={async (e)=>{
       try{
         e.preventDefault();
-        let data = await fetch('/api/'+location.pathname, {method: 'POST', body:(new FormData(e.currentTarget))});
-        data = await data.json();
+        const data:(CustomTypes.AuthPageResponse | CustomTypes.ErrorResponse) = await fetch('/api/'+location.pathname, {method: 'POST', body:(new FormData(e.currentTarget))}).then(res=>res.json());
         console.log(data);
+        if((data as CustomTypes.ErrorResponse)['err_msg']){
+          toast({
+            title:'Error',
+            description:(data as CustomTypes.ErrorResponse)['err_msg'],
+            duration:9000,
+            isClosable:true,
+            status:'error',
+            id:crypto.randomUUID()
+          });
+        }else{
+          window.location.pathname = (data as CustomTypes.AuthPageResponse).redirect;
+        }
       }catch(e){
         window.alert(e);
       }

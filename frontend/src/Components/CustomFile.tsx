@@ -25,8 +25,7 @@ const CustomFile:React.FC<Link>=(props:Link)=> {
       gridTemplateRows={'calc(100% - 50px) 50px'}
       gridTemplateAreas={css_grid_area}
       _hover={{
-        transform:'scale(0.95)',
-        border:'2px solid #805ad5',
+        fiter:'blur(1px)',
         filter:"brightness(110%)"
       }}
     >
@@ -48,8 +47,9 @@ const CustomFile:React.FC<Link>=(props:Link)=> {
         gridArea={'file'}
         minHeight={'100%'}
         minWidth={'100%'}
+        style={{backgroundColor:(bg_image==fileSvg)?('#cbd5e0'):('#000000')}}
         _hover={{
-          backgroundSize:(bg_image==fileSvg)?('100%'):('75%')
+          backgroundSize:(bg_image==fileSvg)?('100%'):('95%')
         }}
       ></CUI.Box>
       <CUI.Box
@@ -74,25 +74,26 @@ const CustomFile:React.FC<Link>=(props:Link)=> {
         maxHeight={'100%'}
         maxWidth={'100%'}
       />
-       <CUI.Button
-            gridArea={'button'}
-            minHeight={'100%'}
-            minWidth={'100%'}
-            placeItems={'center'}
-            _hover={{
-              transform:'scale(0.8)'
-            }}
-            bg={'gray.300'}
-            children={
-              <IonIcon
-              style={{
-                color:'#805ad5',
-                transform:'scale(1.5)',
-                fontWeight:'900'
-              }} 
-              name="ellipsis-horizontal"
-              />
-            }/>
+      <CUI.Button
+        gridArea={'button'}
+        minHeight={'100%'}
+        minWidth={'100%'}
+        placeItems={'center'}
+        _hover={{
+          transform:'scale(0.8)'
+        }}
+        bg={'gray.300'}
+        children={
+          <IonIcon
+          style={{
+            color:'#805ad5',
+            transform:'scale(1.5)',
+            fontWeight:'900'
+          }} 
+          name="ellipsis-horizontal"
+          />
+        }
+      />
     </CUI.Box>
   </>);
 }

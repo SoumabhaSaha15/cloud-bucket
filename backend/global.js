@@ -52,9 +52,19 @@ const CreateFolder= (name)=>{
   }
 }
 /**
- * 
+ * sends user dp
+ * @param {string} id
  */
-const getDP = id =>(fs.existsSync(`${__dirname}/public/client/${id}/dp.png`))?
-  (`./client/${id}/DP.png`):
-  ('./icons/chat-icon.svg');
-export default {getRecords,setObjectKeys,parseJWT,CreateFolder,getDP};
+const getDP = id => (fs.existsSync(`${__dirname}/public/client/${id}/dp.png`))?(`./client/${id}/DP.png`):('');
+/**
+ * 
+ * @param {string} dir 
+ * @returns {string[]}
+ */
+const getFiles = dir => {
+  let files = fs
+  .readdirSync( `${__dirname}/public/client/${dir}/files`)
+  .map(item => (`http://localhost:${process.env.PORT}/client/${dir}/files/${item}`));
+  return files
+}
+export default {getRecords,setObjectKeys,parseJWT,CreateFolder,getDP,getFiles};

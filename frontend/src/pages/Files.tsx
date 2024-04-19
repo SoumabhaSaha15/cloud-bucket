@@ -4,21 +4,23 @@ import * as CUI from  "@chakra-ui/react";
 import CustomFile from "../Components/CustomFile";
 import {useDropzone} from 'react-dropzone'
 import CustomHeader from "../Components/CustomHeader";
+import * as CT from './../CustomTypes/types'
 const Files:React.FC = () => {
 
   const [dp,setDp] = React.useState<string>('https://bit.ly/sage-adebayo');
   const [tabs,setTabs] = React.useState<string[]>(['','']);
   const [tabPanels,setTabPanels] = React.useState<Array<Array<string>>>([[''],['']]);
   window.addEventListener('load', async ()=>{
-    const responseJson = await fetch('/api'+location.pathname,{method:'post'}).then(res=>res.json());
-    if(responseJson['dp']){
+    const responseJson:(CT.FilePageResponse | CT.ErrorResponse) = await fetch('/api'+location.pathname,{method:'post'}).then(res=>res.json());
+    
+    if((responseJson as CT.FilePageResponse)['dp']){
       console.clear();
-      setDp(responseJson['dp']);
-      let fls = responseJson['files']?.map(item=>item.split('.')[1]);
+      setDp((responseJson as CT.FilePageResponse)['dp']);
+      const fls = (responseJson as CT.FilePageResponse)['files']?.map(item=>item.split('.')[1]);
       setTabs([...(new Set(fls))]);
-      let acc:Array<Array<string>> = [];
+      const acc:Array<Array<string>> = [];
       [...(new Set(fls))].forEach((item)=>{
-        let str_arr:string[] = responseJson['files']?.filter(it=>{
+        const str_arr:string[] = (responseJson as CT.FilePageResponse)['files']?.filter(it=>{
             return  it.split('.')[1]==item
         });
         acc.push(str_arr);
