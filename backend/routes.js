@@ -81,7 +81,7 @@ const ROUTES = {
         }
 
       }catch(e){
-        response.send({err_msg:e.message});
+        response.send({err_msg:e.message,redirect:'user-authentication'});
       }
     },
     /**
@@ -96,7 +96,37 @@ const ROUTES = {
       }catch(err){
         console.log(err.message);
       }
-    } 
+    }, 
+    /**
+     * Upload page
+     * @param {express.Request} request 
+     * @param {express.Response} response 
+     */
+    upload:async (request,response)=>{
+      try{
+        if(request.cookies['user_token']){
+          let id =  Global.parseJWT('user_token',request.cookies);
+          if(id){
+            let  rec = Global.getRecords(await models.UserModel.findById(id));
+            if(rec){
+              if(!Array.isArray(request.files.File)){
+                let file = request.files.File;
+                let neme = Global.writeFiles(file.data,id,file.name);
+                response.send({'name':neme});
+              }
+            }else{
+              throw new Error('user not found');
+            }
+          }else{
+            throw new Error('user not loggged in');
+          }
+        }else{
+          throw new Error('user not loggged in');
+        }
+      }catch(e){
+        response.send({err_msg:e.message});
+      }
+    }
   }
 }
 export default ROUTES;

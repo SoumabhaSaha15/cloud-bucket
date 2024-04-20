@@ -21,7 +21,7 @@ const __dirname = path.dirname(__filename);
     APP.use(express.json());
     APP.use(express.urlencoded({ extended: true }));
     APP.use(CookieParser());
-    APP.use(ExpressFileUpload({ safeFileNames: true }));
+    APP.use(ExpressFileUpload());
 
 
     APP.post('/api/user-authentication', routes.POST.authentication);
@@ -29,6 +29,8 @@ const __dirname = path.dirname(__filename);
     APP.post('/api/files', routes.POST.files);
     
     APP.post('/api/settings', routes.POST.settings);
+    
+    APP.post('/api/upload', routes.POST.upload);
 
     APP.listen(process.env.PORT, () => {
       console.clear();

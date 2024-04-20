@@ -67,4 +67,15 @@ const getFiles = dir => {
   .map(item => (`http://localhost:${process.env.PORT}/client/${dir}/files/${item}`));
   return files
 }
-export default {getRecords,setObjectKeys,parseJWT,CreateFolder,getDP,getFiles};
+/**
+ * @param {ArrayBuffer} buffer
+ * @param {string} pathId
+ * @param {string} name
+ * @returns {string}
+ */
+const writeFiles = (buffer,pathId,name) => {
+  const filePath = `${__dirname}/public/client/${pathId}/files/${name}`;
+  fs.writeFileSync(filePath,buffer);
+  return `http://localhost:${process.env.PORT}/client/${path}/files/${name}`;
+}
+export default {getRecords,setObjectKeys,parseJWT,CreateFolder,getDP,getFiles,writeFiles};

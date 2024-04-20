@@ -6,16 +6,13 @@ const Test:React.FC = () => {
   const onDrop = React.useCallback((acc_file:Array<File>) => {
     console.log(acc_file);
   },[]);
-  const {getRootProps,getInputProps,isDragActive} = useDropzone({onDrop});
+  const {getRootProps} = useDropzone({onDrop});
   return (
     <>
     <CUI.Box {...getRootProps()}>
       <CUI.InputGroup>
         <CUI.InputLeftElement children={<IonIcon name="download"/>} />
-        <CUI.Input {...getInputProps()}/>
-        {
-          isDragActive?(<CUI.InputRightElement children={'drag active'} />):(<CUI.InputRightElement children={'drag inactive'} />)
-        }
+       
       </CUI.InputGroup>
     </CUI.Box>
     </>

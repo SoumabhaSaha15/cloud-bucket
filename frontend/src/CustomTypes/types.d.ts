@@ -9,6 +9,13 @@ export type FilePageResponse ={
 export type ErrorResponse = {
   err_msg:string
 }
+export type ErrorFileResponse = {
+  err_msg:string
+  redirect:string
+}
 export type AuthPageResponse = {
   redirect : string;
+}
+export type uploadData = {
+  name:string;
 }
