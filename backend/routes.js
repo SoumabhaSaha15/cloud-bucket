@@ -1,4 +1,4 @@
-import express from "express";
+import express, { response } from "express";
 import fs from 'fs';
 import mongoose from "mongoose";
 import path from 'path';
@@ -8,6 +8,7 @@ import JWT from 'jsonwebtoken';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 import Global from "./global.js";
+import { request } from "http";
 const ROUTES = {
   POST:{
     /**
@@ -117,6 +118,28 @@ const ROUTES = {
             }else{
               throw new Error('user not found');
             }
+          }else{
+            throw new Error('user not loggged in');
+          }
+        }else{
+          throw new Error('user not loggged in');
+        }
+      }catch(e){
+        response.send({err_msg:e.message});
+      }
+    },
+    /**
+     * delete files 
+     * @param {express.Request} request
+     * @param {express.Response} response
+     */
+    delete:async(request,response)=>{
+      try{
+        if(request.cookies['user_token']){
+          let id =  Global.parseJWT('user_token',request.cookies);
+          if(id){
+            fs.unlinkSync(`${__dirname}/public/client/${id}/files/${request.body.fileName}`);
+            response.send({'deleted':true,'fileName':request.body.fileName});
           }else{
             throw new Error('user not loggged in');
           }

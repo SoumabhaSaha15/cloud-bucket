@@ -2,8 +2,10 @@ import React from "react";
 import * as CUI from "@chakra-ui/react";
 import IonIcon from "@reacticons/ionicons";
 import fileSvg from "./../assets/file.svg";
+import * as CT from "./../CustomTypes/types" 
 type Link = {
   link: string;
+  id: string;
 };
 const CustomFile: React.FC<Link> = (props: Link) => {
   // console.log(props)
@@ -16,6 +18,7 @@ const CustomFile: React.FC<Link> = (props: Link) => {
   const css_grid_area = "'file file' 'name button'";
   // const initialFocusRef = React.useRef({focus:()=>{}})
   const { isOpen, onToggle, onClose } = CUI.useDisclosure();
+  const toast = CUI.useToast();
   return (
     <>
       <CUI.Box
@@ -32,6 +35,7 @@ const CustomFile: React.FC<Link> = (props: Link) => {
           fiter: "blur(1px)",
           filter: "brightness(110%)",
         }}
+        id={props.id}
       >
         <CUI.Badge
           children={badge}
@@ -88,6 +92,7 @@ const CustomFile: React.FC<Link> = (props: Link) => {
           onClose={onClose}
           placement="bottom"
           returnFocusOnClose={false}
+          id={'popover-'+props.id}
         >
           <CUI.PopoverTrigger>
             <CUI.Button
@@ -98,9 +103,7 @@ const CustomFile: React.FC<Link> = (props: Link) => {
               _hover={{
                 transform: "scale(0.8)",
               }}
-              onClick={() => {
-                onToggle();
-              }}
+              onClick={onToggle}
               bg={"gray.300"}
               children={
                 <IonIcon
@@ -126,8 +129,32 @@ const CustomFile: React.FC<Link> = (props: Link) => {
               >
                 <CUI.Button
                   _hover={{ color: "#805ad5" }}
-                  onClick={(e) => {
-                    console.log(e.currentTarget);
+                  onClick={async () => {
+                    const response :(CT.ErrorResponse|CT.deleteRouteResponse) = await fetch('/api/delete',{
+                        method:'POST',
+                        body:JSON.stringify({"fileName":file_name}),
+                        headers:{
+                          "Content-Type": "application/json",
+                        }
+                      }).then(res=>res.json());
+                      if((response as CT.ErrorResponse)['err_msg']){
+                        toast({
+                          title: "item added",
+                          description: (response as CT.ErrorResponse)['err_msg'],
+                          status: "error",
+                          duration: 3000,
+                          isClosable: true,
+                          id: crypto.randomUUID(),
+                        })
+                      }else{
+                        if((response as CT.deleteRouteResponse)['deleted']){
+                          const element = document.getElementById(props.id)
+                          element?.parentElement?.removeChild(element);
+                          onToggle();
+                        }else{
+                          console.log(response);
+                        }
+                      }
                   }}
                   rightIcon={<IonIcon name="trash" />}
                   children={"delete"}

@@ -126,7 +126,7 @@ const Files: React.FC = () => {
                     children={item
                       .map((it) => it.toString())
                       .map((it1) => (
-                        <CustomFile link={it1} key={crypto.randomUUID()} />
+                        <CustomFile link={it1} key={crypto.randomUUID()} id={crypto.randomUUID()} />
                       ))}
                   />
                 }

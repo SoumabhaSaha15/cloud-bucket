@@ -19,3 +19,7 @@ export type AuthPageResponse = {
 export type uploadData = {
   name:string;
 }
+export type deleteRouteResponse = {
+  deleted:string;
+  fileName:string;
+} 
