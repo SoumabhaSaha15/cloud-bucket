@@ -24,6 +24,7 @@ const UserAuthentication:React.FC<React.PropsWithChildren> = () => {
     UserName:'UserName'
   });
   const [DP,set_DP] = React.useState<string>('./../src/assets/user.svg');
+  const [isLoading,setIsLoading] = React.useState<boolean>(false);
   const [passwordVisibility,setPasswordVisibility] = React.useState<CustomTypes.PASSWORD_VISIBLE_OR_NOT>({IconName:'eye-sharp',InputType:'password'});
   const toast = CUI.useToast();
   return (
@@ -40,6 +41,7 @@ const UserAuthentication:React.FC<React.PropsWithChildren> = () => {
     onSubmit={async (e)=>{
       try{
         e.preventDefault();
+        setIsLoading(true);
         const data:(CustomTypes.AuthPageResponse | CustomTypes.ErrorResponse) = await fetch('/api/'+location.pathname, {method: 'POST', body:(new FormData(e.currentTarget))}).then(res=>res.json());
         console.log(data);
         if((data as CustomTypes.ErrorResponse)['err_msg']){
@@ -219,6 +221,8 @@ const UserAuthentication:React.FC<React.PropsWithChildren> = () => {
           boxShadow:'2px 2px 4px #805ad580, -2px -2px 4px #805ad580, -2px 2px 4px #805ad580, 2px -2px 4px #805ad580'
         }}
         children={form_type.formName}
+        isLoading={isLoading}
+        loadingText={'submitting'}
       />
     </CUI.Stack>
   </form>

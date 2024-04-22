@@ -5,7 +5,7 @@ import fileSvg from "./../assets/file.svg";
 import * as CT from "./../CustomTypes/types" 
 type Link = {
   link: string;
-  id: string;
+  onDelete:(name:string)=>void;
 };
 const CustomFile: React.FC<Link> = (props: Link) => {
   // console.log(props)
@@ -35,7 +35,6 @@ const CustomFile: React.FC<Link> = (props: Link) => {
           fiter: "blur(1px)",
           filter: "brightness(110%)",
         }}
-        id={props.id}
       >
         <CUI.Badge
           children={badge}
@@ -92,7 +91,7 @@ const CustomFile: React.FC<Link> = (props: Link) => {
           onClose={onClose}
           placement="bottom"
           returnFocusOnClose={false}
-          id={'popover-'+props.id}
+          trigger="hover"
         >
           <CUI.PopoverTrigger>
             <CUI.Button
@@ -139,7 +138,7 @@ const CustomFile: React.FC<Link> = (props: Link) => {
                       }).then(res=>res.json());
                       if((response as CT.ErrorResponse)['err_msg']){
                         toast({
-                          title: "item added",
+                          title: "error occured",
                           description: (response as CT.ErrorResponse)['err_msg'],
                           status: "error",
                           duration: 3000,
@@ -148,8 +147,7 @@ const CustomFile: React.FC<Link> = (props: Link) => {
                         })
                       }else{
                         if((response as CT.deleteRouteResponse)['deleted']){
-                          const element = document.getElementById(props.id)
-                          element?.parentElement?.removeChild(element);
+                          props.onDelete(props.link)
                           onToggle();
                         }else{
                           console.log(response);
@@ -163,8 +161,8 @@ const CustomFile: React.FC<Link> = (props: Link) => {
                 />
                 <CUI.Button
                   _hover={{ color: "#805ad5" }}
-                  onClick={(e) => {
-                    console.log(e.currentTarget);
+                  onClick={() => {
+                    window.open(props.link);
                   }}
                   rightIcon={<IonIcon name="link" />}
                   children={"preview"}
@@ -173,8 +171,28 @@ const CustomFile: React.FC<Link> = (props: Link) => {
                 />
                 <CUI.Button
                   _hover={{ color: "#805ad5" }}
-                  onClick={(e) => {
-                    console.log(e.currentTarget);
+                  onClick={()=>{
+                    window.navigator.clipboard.writeText(props.link)
+                    .then(()=>{
+                      toast({
+                        title: "copied to clipboard",
+                        description: file_name,
+                        status: "success",
+                        duration: 3000,
+                        isClosable: true,
+                        id: crypto.randomUUID(),
+                      })
+                    })
+                    .catch(()=>{
+                      toast({
+                        title: "error occured",
+                        description: 'cant copy filename',
+                        status: "error",
+                        duration: 3000,
+                        isClosable: true,
+                        id: crypto.randomUUID(),
+                      })
+                    })
                   }}
                   rightIcon={<IonIcon name="copy-outline" />}
                   children={"copy-link"}
@@ -183,8 +201,14 @@ const CustomFile: React.FC<Link> = (props: Link) => {
                 />
                 <CUI.Button
                   _hover={{ color: "#805ad5" }}
-                  onClick={(e) => {
-                    console.log(e.currentTarget);
+                  onClick={async () => {
+                    const blob =  await fetch(props.link).then(res=>res.blob());
+                    const url = window.URL.createObjectURL(blob);
+                    const link = document.createElement('a');
+                    link.href = url;
+                    link.download = file_name??'';
+                    link.click();
+                    window.URL.revokeObjectURL(url);
                   }}
                   rightIcon={<IonIcon name="download" />}
                   children={"download"}

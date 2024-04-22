@@ -124,9 +124,13 @@ const Files: React.FC = () => {
                     gap={"10px"}
                     justifyContent={"space-evenly"}
                     children={item
-                      .map((it) => it.toString())
-                      .map((it1) => (
-                        <CustomFile link={it1} key={crypto.randomUUID()} id={crypto.randomUUID()} />
+                      .map((item1) => item1.toString())
+                      .map((item2) => (
+                        <CustomFile link={item2} key={crypto.randomUUID()} onDelete={(name)=>{
+                          setTabPanels((prev)=>{
+                            return prev.map(item3=>item3.filter(item4=>(item4!==name)))
+                          })
+                        }}/>
                       ))}
                   />
                 }
