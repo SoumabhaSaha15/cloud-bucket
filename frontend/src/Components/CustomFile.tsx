@@ -5,10 +5,10 @@ import fileSvg from "./../assets/file.svg";
 import * as CT from "./../CustomTypes/types" 
 type Link = {
   link: string;
-  onDelete:(name:string)=>void;
+  onDelete:(name:string,tabNumber:number)=>void;
+  tabNumber:number
 };
 const CustomFile: React.FC<Link> = (props: Link) => {
-  // console.log(props)
   const badge: string | undefined = props.link.split(".").pop();
   const file_name: string | undefined = props.link.split("/").pop();
   const extensions: string[] = ["jpg", "jpeg", "png", "svg"];
@@ -147,7 +147,7 @@ const CustomFile: React.FC<Link> = (props: Link) => {
                         })
                       }else{
                         if((response as CT.deleteRouteResponse)['deleted']){
-                          props.onDelete(props.link)
+                          props.onDelete(props.link,props.tabNumber)
                           onToggle();
                         }else{
                           console.log(response);

@@ -23,3 +23,7 @@ export type deleteRouteResponse = {
   deleted:string;
   fileName:string;
 } 
+export type FilesMap = {
+  fileType:string;
+  fileList:string[];
+}

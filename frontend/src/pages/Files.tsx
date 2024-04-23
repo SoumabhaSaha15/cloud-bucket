@@ -32,16 +32,11 @@ const Files: React.FC = () => {
         ),
       ];
       setTabs(extensions);
-      const fileMap = new Map<string, string[]>();
+      const fileMap:CT.FilesMap[] = [];
       extensions.forEach((item) => {
-        fileMap.set(
-          item,
-          jsonData.files.filter(
-            (it) => it.split(".")[1].toLocaleLowerCase() == item
-          )
-        );
+        fileMap.push({fileType:item,fileList:jsonData.files.filter((it) => it.split(".")[1].toLocaleLowerCase() == item)})
       });
-      setTabPanels([...fileMap.values()]);
+      setTabPanels(fileMap.map(it=>it.fileList));
     } else {
       alert((responseJson as CT.ErrorFileResponse).err_msg);
     }
@@ -97,7 +92,7 @@ const Files: React.FC = () => {
           alignItems={"center"}
           children={<CustomHeader link={dp} />}
         />
-        <CUI.Tabs variant="line" colorScheme="purple">
+        <CUI.Tabs variant="line" colorScheme="purple" defaultIndex={0}>
           <CUI.TabList
             height={"5vh"}
             children={tabs.map((item) => (
@@ -113,7 +108,7 @@ const Files: React.FC = () => {
             h={"87vh"}
             overflow={"auto"}
             filter={isDragActive ? "blur(5px)" : "blur(0px)"}
-            children={tabPanels.map((item) => (
+            children={tabPanels.map((item,index) => (
               <CUI.TabPanel
                 key={crypto.randomUUID()}
                 children={
@@ -126,10 +121,11 @@ const Files: React.FC = () => {
                     children={item
                       .map((item1) => item1.toString())
                       .map((item2) => (
-                        <CustomFile link={item2} key={crypto.randomUUID()} onDelete={(name)=>{
-                          setTabPanels((prev)=>{
-                            return prev.map(item3=>item3.filter(item4=>(item4!==name)))
-                          })
+                        <CustomFile tabNumber={index} link={item2} key={crypto.randomUUID()} onDelete={(name,tabNumber)=>{
+                          setTabPanels((prev)=> prev.map(item3=>item3.filter(item4=>(item4!==name))));
+                          setTabPanels((prev)=> prev.filter(item3=>item3.length!==0));
+                          {/* because of asynchronous rendering length 1 is outdated value*/}
+                          setTabs((prev)=>(tabPanels[tabNumber].length==1)?prev.filter((tab_name,idx)=>(idx!=tabNumber)):prev);
                         }}/>
                       ))}
                   />
