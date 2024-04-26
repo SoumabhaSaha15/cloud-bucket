@@ -27,8 +27,7 @@ const Files: React.FC = () => {
       const extensions = [
         ...new Set(
           jsonData["files"]
-            ?.map((item) => item.split(".")[1])
-            .map((item) => item.toLocaleLowerCase())
+            ?.map((item) => item.split(".")[1].toLocaleLowerCase())
         ),
       ];
       setTabs(extensions);
@@ -45,13 +44,24 @@ const Files: React.FC = () => {
   const [Width, SetWidth] = React.useState<string>(
     window.innerWidth.toString() + "px"
   );
-  window.onresize = () => {
+  const Debounce = (cb:()=>void,delay=1000)=>{
+    let time_out:number;
+    return ()=>{
+      clearTimeout(time_out);
+      time_out = setTimeout(cb,delay);
+    }
+  }
+  const Resize_ViewPort = Debounce(()=>{
     SetWidth(window.innerWidth.toString() + "px");
+  },2000);
+  window.onresize = () => {
+    Resize_ViewPort();
   };
 
   const toast = CUI.useToast();
 
   const onDrop = React.useCallback((acceptedFiles: Array<File>) => {
+    const newFiles:Array<string> = [];
     acceptedFiles.forEach((item, index, array) => {
       const data = new FormData();
       data.append("File", item);
@@ -61,10 +71,21 @@ const Files: React.FC = () => {
       })
         .then((res) => res.json())
         .then((data) => {
+        newFiles.push(data['name'])
           toast({
             title: "item added",
-            description: data.name,
+            description: data.name.split('/').pop(),
             status: "success",
+            duration: 3000,
+            isClosable: true,
+            id: crypto.randomUUID(),
+          });
+        })
+        .catch(err=>{
+          toast({
+            title: "Error",
+            description: err.message,
+            status: "warning",
             duration: 3000,
             isClosable: true,
             id: crypto.randomUUID(),
@@ -72,7 +93,16 @@ const Files: React.FC = () => {
         })
         .finally(() => {
           if (index == array.length - 1) {
-            window.location.reload();
+            setTabPanels((prev)=>{
+              const fileMap:CT.FilesMap[] = [];
+              const  file_set = new Set([...prev.flat(1),...newFiles]);
+              const extension =[...new Set( [...file_set].map((item) => item.split(".")[1].toLocaleLowerCase()))] ;
+              setTabs(extension);
+              extension.forEach((item) => {
+                fileMap.push({fileType:item,fileList:[...file_set].filter((it) => it.split(".")[1].toLocaleLowerCase() == item)});
+              });
+              return fileMap.map(it=>it.fileList);
+            });
           }
         });
     });
@@ -133,13 +163,25 @@ const Files: React.FC = () => {
               />
             ))}
           />
-
+          <CUI.Button
+            leftIcon={<IonIcon style={{ fontWeight: "700" }} name="search" />}
+            bg="purple.500"
+            style={{
+              position: "absolute",
+              bottom: "20px",
+              left: "20px",
+              fontWeight: "700",
+              zIndex: "1",
+            }}
+            onClick={onToggle}
+            children={"search"}
+            _hover={{ color: "#ffffff" }}
+          />
           <CUI.Popover
             isOpen={isOpen}
             onClose={onClose}
             placement="bottom"
             returnFocusOnClose={false}
-            
           >
             <CUI.PopoverTrigger>
               <CUI.Button

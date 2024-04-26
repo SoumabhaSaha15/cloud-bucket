@@ -76,6 +76,6 @@ const getFiles = dir => {
 const writeFiles = (buffer,pathId,name) => {
   const filePath = `${__dirname}/public/client/${pathId}/files/${name}`;
   fs.writeFileSync(filePath,buffer);
-  return `http://localhost:${process.env.PORT}/client/${path}/files/${name}`;
+  return `http://localhost:${process.env.PORT}/client/${pathId}/files/${name}`;
 }
 export default {getRecords,setObjectKeys,parseJWT,CreateFolder,getDP,getFiles,writeFiles};
