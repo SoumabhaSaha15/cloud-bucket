@@ -72,7 +72,7 @@ const CustomFile: React.FC<Link> = (props: Link) => {
                 display: "block",
                 whiteSpace: "nowrap",
                 textOverflow: "ellipsis",
-                fontWeight: "900",
+                fontWeight: "700",
               }}
             />
           }

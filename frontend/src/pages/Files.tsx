@@ -2,11 +2,13 @@ import React from "react";
 import IonIcon from "@reacticons/ionicons";
 import * as CUI from "@chakra-ui/react";
 import CustomFile from "../Components/CustomFile";
+import CSP from "../Components/CustomSearchPanel";
 import { useDropzone } from "react-dropzone";
 import CustomHeader from "../Components/CustomHeader";
 import * as CT from "./../CustomTypes/types";
 const Files: React.FC = () => {
   const [dp, setDp] = React.useState<string>("https://bit.ly/sage-adebayo");
+  const [openSearchPanel,setOpenSearchPanel] = React.useState<"none"|"block">("none");
   const [tabs, setTabs] = React.useState<string[]>(["", ""]);
   const [tabPanels, setTabPanels] = React.useState<Array<Array<string>>>([
     [""],
@@ -163,9 +165,12 @@ const Files: React.FC = () => {
               />
             ))}
           />
+          <CSP links={tabPanels.flat(1)} display={openSearchPanel}>
+          </CSP>
           <CUI.Button
             leftIcon={<IonIcon style={{ fontWeight: "700" }} name="search" />}
             bg="purple.500"
+            zIndex={"2"}
             style={{
               position: "absolute",
               bottom: "20px",
@@ -173,9 +178,11 @@ const Files: React.FC = () => {
               fontWeight: "700",
               zIndex: "1",
             }}
-            onClick={onToggle}
             children={"search"}
             _hover={{ color: "#ffffff" }}
+            onClick={()=>{
+              setOpenSearchPanel(prev=>(prev=="none")?("block"):("none"));
+            }}
           />
           <CUI.Popover
             isOpen={isOpen}
