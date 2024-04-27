@@ -6,13 +6,13 @@ type Files = {
   links: string[];
 };
 type NameAndLink = {
-  name:string;
-  link:string;
+  name:string|null;
+  link:string|null;
 }
 const CustomSearchPanel:React.FC<Files>=(props:Files)=>{
   const toast = CUI.useToast();
   const names:Array<NameAndLink> = props.links.map(item=>({name:item.split("/").pop()??"",link:item}));
-  const [matched,setMatched]  = React.useState<NameAndLink[]>([{name:"",link:""}]);
+  const [matched,setMatched]  = React.useState<NameAndLink[]>([{name:null,link:null}]);
   return(
   <>
   <CUI.Box 
@@ -30,7 +30,7 @@ const CustomSearchPanel:React.FC<Files>=(props:Files)=>{
       <CUI.Input type="text" placeholder="search files" onKeyDown={(e)=>{
         if(e.key == "Enter"){
           if(e.currentTarget.value!="")
-            setMatched(names.filter(item=>item.name.toLocaleLowerCase().includes(e.currentTarget.value.toLocaleLowerCase())));
+            setMatched(names.filter(item=>(item.name??"").toLocaleLowerCase().includes(e.currentTarget.value.toLocaleLowerCase())));
           else
             setMatched([]);
         }
@@ -55,7 +55,7 @@ const CustomSearchPanel:React.FC<Files>=(props:Files)=>{
             isClosable:true,
             id:crypto.randomUUID()
           })
-          window.navigator.clipboard.writeText(item.link);
+          window.navigator.clipboard.writeText(item.link??"");
         }}
       />))}
     />

@@ -29,13 +29,13 @@ const Files: React.FC = () => {
       const extensions = [
         ...new Set(
           jsonData["files"]
-            ?.map((item) => item.split(".")[1].toLocaleLowerCase())
+            ?.map((item) => (item.split(".").pop()??"").toLocaleLowerCase())
         ),
       ];
       setTabs(extensions);
       const fileMap:CT.FilesMap[] = [];
       extensions.forEach((item) => {
-        fileMap.push({fileType:item,fileList:jsonData.files.filter((it) => it.split(".")[1].toLocaleLowerCase() == item)})
+        fileMap.push({fileType:item,fileList:jsonData.files.filter((it) => (it.split(".").pop()??"").toLocaleLowerCase() == item)})
       });
       setTabPanels(fileMap.map(it=>it.fileList));
     } else {
@@ -98,10 +98,10 @@ const Files: React.FC = () => {
             setTabPanels((prev)=>{
               const fileMap:CT.FilesMap[] = [];
               const  file_set = new Set([...prev.flat(1),...newFiles]);
-              const extension =[...new Set( [...file_set].map((item) => item.split(".")[1].toLocaleLowerCase()))] ;
+              const extension =[...new Set( [...file_set].map((item) => (item.split(".").pop()??"").toLocaleLowerCase()))] ;
               setTabs(extension);
               extension.forEach((item) => {
-                fileMap.push({fileType:item,fileList:[...file_set].filter((it) => it.split(".")[1].toLocaleLowerCase() == item)});
+                fileMap.push({fileType:item,fileList:[...file_set].filter((it) => (it.split(".").pop()??"").toLocaleLowerCase() == item)});
               });
               return fileMap.map(it=>it.fileList);
             });

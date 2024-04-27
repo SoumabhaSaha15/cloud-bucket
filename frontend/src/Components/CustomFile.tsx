@@ -149,6 +149,14 @@ const CustomFile: React.FC<Link> = (props: Link) => {
                         if((response as CT.deleteRouteResponse)['deleted']){
                           props.onDelete(props.link,props.tabNumber)
                           onToggle();
+                          toast({
+                            title:'deleted',
+                            isClosable:true,
+                            duration:5000,
+                            status:'error',
+                            id:crypto.randomUUID(),
+                            description:file_name
+                          })
                         }else{
                           console.log(response);
                         }
