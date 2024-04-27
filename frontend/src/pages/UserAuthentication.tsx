@@ -35,6 +35,7 @@ const UserAuthentication:React.FC<React.PropsWithChildren> = () => {
       height:form_type.height,
       borderRadius:'10px',
       padding:'10px',
+      transition:'all 0.25s ease-in-out',
       boxShadow:'2px 2px 4px #808080, -2px -2px 4px #808080, -2px 2px 4px #808080, 2px -2px 4px #808080'
     }} 
     name={form_type.formName} 

@@ -18,6 +18,7 @@ const CustomFile: React.FC<Link> = (props: Link) => {
   const css_grid_area = "'file file' 'name button'";
   // const initialFocusRef = React.useRef({focus:()=>{}})
   const { isOpen, onToggle, onClose } = CUI.useDisclosure();
+  const MODAL = CUI.useDisclosure()
   const toast = CUI.useToast();
   return (
     <>
@@ -56,6 +57,7 @@ const CustomFile: React.FC<Link> = (props: Link) => {
           minWidth={"100%"}
           style={{
             backgroundColor: bg_image == fileSvg ? "#cbd5e0" : "#000000",
+            transition:'all 0.25s ease-in-out'
           }}
           _hover={{
             backgroundSize: bg_image == fileSvg ? "100%" : "95%",
@@ -85,6 +87,60 @@ const CustomFile: React.FC<Link> = (props: Link) => {
           maxHeight={"100%"}
           maxWidth={"100%"}
         />
+
+      <CUI.Modal isOpen={MODAL.isOpen} onClose={MODAL.onClose}>
+        <CUI.ModalOverlay />
+        <CUI.ModalContent>
+          <CUI.ModalHeader>{'Delete file'}</CUI.ModalHeader>
+          <CUI.ModalCloseButton />
+          <CUI.ModalBody>
+            {'Do you want to delete '+file_name+' ?'}
+          </CUI.ModalBody>
+          <CUI.ModalFooter>
+            <CUI.Button children={'Close'} colorScheme='purple' mr={3} onClick={MODAL.onClose}/>
+              
+            <CUI.Button 
+              colorScheme="red"
+              children = {'delete permanently'}
+              onClick={async () => {
+                const response :(CT.ErrorResponse|CT.deleteRouteResponse) = await fetch('/api/delete',{
+                    method:'POST',
+                    body:JSON.stringify({"fileName":file_name}),
+                    headers:{
+                      "Content-Type": "application/json",
+                    }
+                  }).then(res=>res.json());
+                  if((response as CT.ErrorResponse)['err_msg']){
+                    toast({
+                      title: "error occured",
+                      description: (response as CT.ErrorResponse)['err_msg'],
+                      status: "error",
+                      duration: 3000,
+                      isClosable: true,
+                      id: crypto.randomUUID(),
+                    })
+                  }else{
+                    if((response as CT.deleteRouteResponse)['deleted']){
+                      props.onDelete(props.link,props.tabNumber)
+                      onToggle();
+                      toast({
+                        title:'deleted',
+                        isClosable:true,
+                        duration:5000,
+                        status:'error',
+                        id:crypto.randomUUID(),
+                        description:file_name
+                      })
+                    }else{
+                      console.log(response);
+                    }
+                  }
+              }}
+            />
+          </CUI.ModalFooter>
+        </CUI.ModalContent>
+      </CUI.Modal>
+
 
         <CUI.Popover
           isOpen={isOpen}
@@ -128,40 +184,7 @@ const CustomFile: React.FC<Link> = (props: Link) => {
               >
                 <CUI.Button
                   _hover={{ color: "#805ad5" }}
-                  onClick={async () => {
-                    const response :(CT.ErrorResponse|CT.deleteRouteResponse) = await fetch('/api/delete',{
-                        method:'POST',
-                        body:JSON.stringify({"fileName":file_name}),
-                        headers:{
-                          "Content-Type": "application/json",
-                        }
-                      }).then(res=>res.json());
-                      if((response as CT.ErrorResponse)['err_msg']){
-                        toast({
-                          title: "error occured",
-                          description: (response as CT.ErrorResponse)['err_msg'],
-                          status: "error",
-                          duration: 3000,
-                          isClosable: true,
-                          id: crypto.randomUUID(),
-                        })
-                      }else{
-                        if((response as CT.deleteRouteResponse)['deleted']){
-                          props.onDelete(props.link,props.tabNumber)
-                          onToggle();
-                          toast({
-                            title:'deleted',
-                            isClosable:true,
-                            duration:5000,
-                            status:'error',
-                            id:crypto.randomUUID(),
-                            description:file_name
-                          })
-                        }else{
-                          console.log(response);
-                        }
-                      }
-                  }}
+                  onClick={MODAL.onOpen}
                   rightIcon={<IonIcon name="trash" />}
                   children={"delete"}
                   display={"flex"}

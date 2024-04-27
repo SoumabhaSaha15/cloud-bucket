@@ -6,6 +6,7 @@ import CSP from "../Components/CustomSearchPanel";
 import { useDropzone } from "react-dropzone";
 import CustomHeader from "../Components/CustomHeader";
 import * as CT from "./../CustomTypes/types";
+import fileSvg from "./../assets/empty-bucket.svg";
 const Files: React.FC = () => {
   const [dp, setDp] = React.useState<string>("https://bit.ly/sage-adebayo");
   const [openSearchPanel,setOpenSearchPanel] = React.useState<"none"|"block">("none");
@@ -14,7 +15,6 @@ const Files: React.FC = () => {
     [""],
     [""],
   ]);
-  // const root_drop_panel_id = crypto.randomUUID();
   const { isOpen, onToggle, onClose } = CUI.useDisclosure();
   window.addEventListener("load", async () => {
     const responseJson: CT.FilePageResponse | CT.ErrorResponse = await fetch(
@@ -127,20 +127,23 @@ const Files: React.FC = () => {
         <CUI.Tabs variant="line" colorScheme="purple" defaultIndex={0}>
           <CUI.TabList
             height={"5vh"}
-            children={tabs.map((item) => (
+            children={
+              (tabs.length>0)?
+              tabs.map((item) => (
               <CUI.Tab
                 key={crypto.randomUUID()}
                 fontWeight={"700"}
                 children={item}
               />
-            ))}
+            )):('')
+            }
           />
 
           <CUI.TabPanels
             h={"87vh"}
             overflow={"auto"}
             filter={isDragActive ? "blur(5px)" : "blur(0px)"}
-            children={tabPanels.map((item,index) => (
+            children={(tabPanels.length>0)?tabPanels.map((item,index) => (
               <CUI.TabPanel
                 key={crypto.randomUUID()}
                 children={
@@ -163,7 +166,7 @@ const Files: React.FC = () => {
                   />
                 }
               />
-            ))}
+            )):(<CUI.TabPanel textAlign={'center'} backgroundImage={'url("' + fileSvg + '")'} backgroundPosition={"center center"} backgroundRepeat={"no-repeat"} backgroundSize={"contain"} fontSize={'24px'} h={"87vh"} children={'no files uploaded'}/>)}
           />
           <CSP links={tabPanels.flat(1)} display={openSearchPanel}>
           </CSP>

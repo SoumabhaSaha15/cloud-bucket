@@ -6,13 +6,13 @@ type Files = {
   links: string[];
 };
 type NameAndLink = {
-  name:string|null;
-  link:string|null;
+  name:string;
+  link:string;
 }
 const CustomSearchPanel:React.FC<Files>=(props:Files)=>{
   const toast = CUI.useToast();
   const names:Array<NameAndLink> = props.links.map(item=>({name:item.split("/").pop()??"",link:item}));
-  const [matched,setMatched]  = React.useState<NameAndLink[]>([{name:null,link:null}]);
+  const [matched,setMatched]  = React.useState<NameAndLink[]>([]);
   return(
   <>
   <CUI.Box 
@@ -23,7 +23,6 @@ const CustomSearchPanel:React.FC<Files>=(props:Files)=>{
     position={'absolute'}
     top={'50px'}
     left={'10%'}
-    boxShadow={'4px 4px 4px #80808080,-4px 4px 4px #80808080 ,4px -4px 4px #80808080,-4px -4px 4px #80808080'}
   >
     <CUI.InputGroup>
       <CUI.InputLeftElement children={<IonIcon name="search"/>}/>
@@ -41,6 +40,7 @@ const CustomSearchPanel:React.FC<Files>=(props:Files)=>{
       overflow={'auto'}
       padding={'4px'} 
       children={matched.map(item=>(<CUI.Box
+        key={crypto.randomUUID()}
         padding={'10px'}
         marginY={'4px'} 
         _hover={{scale:"0.9",backgroundColor:"#805ad580"}}

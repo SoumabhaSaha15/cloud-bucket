@@ -30,10 +30,11 @@ const CustomHeader:React.FC<UserDP> =(props:UserDP)=>{
             <CUI.PopoverContent borderRadius={'10px'}>
               <CUI.PopoverArrow bg={'purple.500'}/>
               <CUI.PopoverBody 
-                bg='purple.500' 
+                bgColor={'gray.300'} 
                 borderRadius={'10px'}
               >
                 <CUI.Button 
+                  colorScheme="purple"
                   leftIcon={<IonIcon name='settings'/>} 
                   children={'go to account Settings'}
                 />
