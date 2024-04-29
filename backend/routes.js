@@ -91,11 +91,25 @@ const ROUTES = {
     * @param {express.Response} response 
     */
     settings:async (request,response) => {
-      
       try{
-
+        if(request.cookies['user_token']){
+          let id =  Global.parseJWT('user_token',request.cookies);
+          if(id){
+            let  rec = Global.getRecords(await models.UserModel.findById(id));
+            if(rec){
+              let size = Global.getFolderSize(Global.getUserPath(rec._id));
+              response.send({diskSize:size,Email:rec.Email,UserName:rec.UserName,DP:Global.getDP(rec._id)})
+            }else{
+              throw new Error('user not found');
+            }
+          }else{
+            throw new Error('user not loggged in');
+          }
+        }else{
+          throw new Error('user not loggged in');
+        }
       }catch(err){
-        console.log(err.message);
+        response.send({err_msg:err.message,redirect:'user-authentication'});
       }
     }, 
     /**
@@ -149,6 +163,14 @@ const ROUTES = {
       }catch(e){
         response.send({err_msg:e.message});
       }
+    },
+    /**
+     * delete Account
+     * @param {express.Request} request
+     * @param {express.Response} response
+     */
+    deleteAccount:async(request,response)=>{
+      
     }
   }
 }

@@ -3,7 +3,7 @@ import { Route, Routes, BrowserRouter } from "react-router-dom";
 import UserAuthentication from "./pages/UserAuthentication";
 import HomePage from "./pages/HomePage";
 import Files from "./pages/Files";
-import Test from "./pages/Test";
+import Settings from "./pages/Settings";
 function App() {
   return (
     <BrowserRouter>
@@ -11,7 +11,7 @@ function App() {
         <Route path="/" Component={HomePage} />
         <Route path="/user-authentication" Component={UserAuthentication} />
         <Route path="/files" Component={Files} />
-        <Route path="/test" Component={Test} />
+        <Route path="/settings" Component={Settings} />
       </Routes>
     </BrowserRouter>
   );

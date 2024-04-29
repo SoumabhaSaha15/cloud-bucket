@@ -78,4 +78,16 @@ const writeFiles = (buffer,pathId,name) => {
   fs.writeFileSync(filePath,buffer);
   return `http://localhost:${process.env.PORT}/client/${pathId}/files/${name}`;
 }
-export default {getRecords,setObjectKeys,parseJWT,CreateFolder,getDP,getFiles,writeFiles};
+/**
+ * get User path by _id
+ * @param {string} pathId 
+ * @returns {string}
+ */
+const getUserPath = (pathId) => (`${__dirname}/public/client/${pathId}/files`);
+/**
+ * @param {string} path folder path
+ * @returns {number}
+ */
+const  getFolderSize = (path) => fs.readdirSync(path).map(item=>fs.statSync(path+'/'+item).size).reduce((acc,cur)=>(acc+cur),0);
+
+export default {getRecords,setObjectKeys,parseJWT,CreateFolder,getDP,getFiles,writeFiles,getFolderSize,getUserPath};

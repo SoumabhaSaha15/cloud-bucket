@@ -34,6 +34,8 @@ const __dirname = path.dirname(__filename);
     APP.post('/api/upload', routes.POST.upload);
     
     APP.post('/api/delete', routes.POST.delete);
+    
+    APP.post('/api/delete-account', routes.POST.deleteAccount);
 
     APP.listen(process.env.PORT, () => {
       console.clear();

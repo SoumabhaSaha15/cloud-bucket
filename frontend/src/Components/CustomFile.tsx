@@ -11,12 +11,11 @@ type Link = {
 const CustomFile: React.FC<Link> = (props: Link) => {
   const badge: string | undefined = props.link.split(".").pop();
   const file_name: string | undefined = props.link.split("/").pop();
-  const extensions: string[] = ["jpg", "jpeg", "png", "svg"];
+  const extensions: string[] = ["jpg", "jpeg", "png", "svg","webp","gif"];
   const bg_image: string = extensions.includes(badge as string)
     ? props.link
     : fileSvg;
   const css_grid_area = "'file file' 'name button'";
-  // const initialFocusRef = React.useRef({focus:()=>{}})
   const { isOpen, onToggle, onClose } = CUI.useDisclosure();
   const MODAL = CUI.useDisclosure()
   const toast = CUI.useToast();

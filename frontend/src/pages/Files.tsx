@@ -9,13 +9,14 @@ import * as CT from "./../CustomTypes/types";
 import fileSvg from "./../assets/empty-bucket.svg";
 const Files: React.FC = () => {
   const [dp, setDp] = React.useState<string>("https://bit.ly/sage-adebayo");
-  const [openSearchPanel,setOpenSearchPanel] = React.useState<"none"|"block">("none");
+  // const [openSearchPanel,setOpenSearchPanel] = React.useState<"none"|"block">("none");
   const [tabs, setTabs] = React.useState<string[]>(["", ""]);
   const [tabPanels, setTabPanels] = React.useState<Array<Array<string>>>([
     [""],
     [""],
   ]);
   const { isOpen, onToggle, onClose } = CUI.useDisclosure();
+  const MODAL = CUI.useDisclosure();
   window.addEventListener("load", async () => {
     const responseJson: CT.FilePageResponse | CT.ErrorResponse = await fetch(
       "/api" + location.pathname,
@@ -65,48 +66,65 @@ const Files: React.FC = () => {
   const onDrop = React.useCallback((acceptedFiles: Array<File>) => {
     const newFiles:Array<string> = [];
     acceptedFiles.forEach((item, index, array) => {
-      const data = new FormData();
-      data.append("File", item);
-      fetch("/api/upload", {
-        method: "post",
-        body: data,
-      })
-        .then((res) => res.json())
-        .then((data) => {
-        newFiles.push(data['name'])
-          toast({
-            title: "item added",
-            description: data.name.split('/').pop(),
-            status: "success",
-            duration: 3000,
-            isClosable: true,
-            id: crypto.randomUUID(),
-          });
-        })
-        .catch(err=>{
-          toast({
-            title: "Error",
-            description: err.message,
-            status: "warning",
-            duration: 3000,
-            isClosable: true,
-            id: crypto.randomUUID(),
-          });
-        })
-        .finally(() => {
-          if (index == array.length - 1) {
-            setTabPanels((prev)=>{
-              const fileMap:CT.FilesMap[] = [];
-              const  file_set = new Set([...prev.flat(1),...newFiles]);
-              const extension =[...new Set( [...file_set].map((item) => (item.split(".").pop()??"").toLocaleLowerCase()))] ;
-              setTabs(extension);
-              extension.forEach((item) => {
-                fileMap.push({fileType:item,fileList:[...file_set].filter((it) => (it.split(".").pop()??"").toLocaleLowerCase() == item)});
+      try{
+        if(item.name.startsWith(".")){
+          throw new Error('invalid file name '+ item.name);
+        }
+        else{
+          const data = new FormData();
+          data.append("File", item);
+          fetch("/api/upload", {
+            method: "post",
+            body: data,
+          })
+            .then((res) => res.json())
+            .then((data) => {
+            newFiles.push(data['name'])
+              toast({
+                title: "item added",
+                description: data.name.split('/').pop(),
+                status: "success",
+                duration: 3000,
+                isClosable: true,
+                id: crypto.randomUUID(),
               });
-              return fileMap.map(it=>it.fileList);
+            })
+            .catch(err=>{
+              toast({
+                title: "Error",
+                description: err.message,
+                status: "warning",
+                duration: 3000,
+                isClosable: true,
+                id: crypto.randomUUID(),
+              });
+            })
+            .finally(() => {
+              if (index == array.length - 1) {
+                setTabPanels((prev)=>{
+                  const fileMap:CT.FilesMap[] = [];
+                  const  file_set = new Set([...prev.flat(1),...newFiles]);
+                  const extension =[...new Set( [...file_set].map((item) => (item.split(".").pop()??"").toLocaleLowerCase()))] ;
+                  setTabs(extension);
+                  extension.forEach((item) => {
+                    fileMap.push({fileType:item,fileList:[...file_set].filter((it) => (it.split(".").pop()??"").toLocaleLowerCase() == item)});
+                  });
+                  return fileMap.map(it=>it.fileList);
+                });
+              }
             });
-          }
+        }
+      }catch(e){
+        toast({
+          title:'Error',
+          description:(e as {message:string})['message']??'invalid file name',
+          duration:7000,
+          status:'error',
+          id:crypto.randomUUID(),
+          isClosable:true,
         });
+      }
+      
     });
   }, []);
 
@@ -160,20 +178,43 @@ const Files: React.FC = () => {
                           setTabPanels((prev)=> prev.map(item3=>item3.filter(item4=>(item4!==name))));
                           setTabPanels((prev)=> prev.filter(item3=>item3.length!==0));
                           {/* because of asynchronous rendering length 1 is outdated value*/}
-                          setTabs((prev)=>(tabPanels[tabNumber].length==1)?prev.filter((tab_name,idx)=>(idx!=tabNumber)):prev);
+                          setTabs((prev)=>(tabPanels[tabNumber].length==1)?prev.filter((_,idx)=>(idx!=tabNumber)):prev);
                         }}/>
                       ))}
                   />
                 }
               />
-            )):(<CUI.TabPanel textAlign={'center'} backgroundImage={'url("' + fileSvg + '")'} backgroundPosition={"center center"} backgroundRepeat={"no-repeat"} backgroundSize={"contain"} fontSize={'24px'} h={"87vh"} children={'no files uploaded'}/>)}
+            )):(<CUI.TabPanel textAlign={'center'} backgroundImage={'url("' + fileSvg + '")'} backgroundPosition={"center center"} backgroundRepeat={"no-repeat"} backgroundSize={"30%"} fontSize={'24px'} h={"87vh"} children={'no files uploaded'}/>)}
           />
-          <CSP links={tabPanels.flat(1)} display={openSearchPanel}>
-          </CSP>
+          
+
+
+
+
+
+
+          <CUI.Modal isOpen={MODAL.isOpen} onClose={MODAL.onClose}>
+            <CUI.ModalOverlay />
+            <CUI.ModalContent>
+            <CUI.ModalHeader>{'Search panel'}</CUI.ModalHeader>
+            <CUI.ModalCloseButton />
+            <CUI.ModalBody minHeight={'65vh'} marginY={'10px'} >
+              <CSP links={tabPanels.flat(1)}></CSP>
+            </CUI.ModalBody>
+            <CUI.ModalFooter>
+              <CUI.Button children={'Close'} colorScheme='purple' mr={3} onClick={MODAL.onClose}/>
+            </CUI.ModalFooter>
+          </CUI.ModalContent>
+      </CUI.Modal>
+
+
+
+
+
+
           <CUI.Button
             leftIcon={<IonIcon style={{ fontWeight: "700" }} name="search" />}
             bg="purple.500"
-            zIndex={"2"}
             style={{
               position: "absolute",
               bottom: "20px",
@@ -183,9 +224,7 @@ const Files: React.FC = () => {
             }}
             children={"search"}
             _hover={{ color: "#ffffff" }}
-            onClick={()=>{
-              setOpenSearchPanel(prev=>(prev=="none")?("block"):("none"));
-            }}
+            onClick={MODAL.onOpen}
           />
           <CUI.Popover
             isOpen={isOpen}

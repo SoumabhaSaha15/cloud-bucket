@@ -37,6 +37,9 @@ const CustomHeader:React.FC<UserDP> =(props:UserDP)=>{
                   colorScheme="purple"
                   leftIcon={<IonIcon name='settings'/>} 
                   children={'go to account Settings'}
+                  onClick={()=>{
+                    window.location.pathname = '/settings'
+                  }}
                 />
               </CUI.PopoverBody>
             </CUI.PopoverContent>

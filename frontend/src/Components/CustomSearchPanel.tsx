@@ -2,7 +2,6 @@ import React from "react";
 import IonIcon from "@reacticons/ionicons";
 import * as CUI from "@chakra-ui/react";
 type Files = {
-  display: "none"|"block"
   links: string[];
 };
 type NameAndLink = {
@@ -16,13 +15,14 @@ const CustomSearchPanel:React.FC<Files>=(props:Files)=>{
   return(
   <>
   <CUI.Box 
-    style={{display:props.display}} 
+    style={{display:'block'}} 
     width={'80%'}
     borderRadius={'10px'}
     bg={'gray.300'}
     position={'absolute'}
     top={'50px'}
     left={'10%'}
+    padding={'4px'}
   >
     <CUI.InputGroup>
       <CUI.InputLeftElement children={<IonIcon name="search"/>}/>
@@ -39,6 +39,7 @@ const CustomSearchPanel:React.FC<Files>=(props:Files)=>{
       maxHeight={'60vh'}
       overflow={'auto'}
       padding={'4px'} 
+      display={matched.length>0?'block':'none'}
       children={matched.map(item=>(<CUI.Box
         key={crypto.randomUUID()}
         padding={'10px'}
