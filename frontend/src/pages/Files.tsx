@@ -41,6 +41,7 @@ const Files: React.FC = () => {
       setTabPanels(fileMap.map(it=>it.fileList));
     } else {
       alert((responseJson as CT.ErrorFileResponse).err_msg);
+      window.location.pathname = (responseJson as CT.ErrorFileResponse).redirect
     }
   });
 
@@ -231,6 +232,7 @@ const Files: React.FC = () => {
             onClose={onClose}
             placement="bottom"
             returnFocusOnClose={false}
+            trigger="hover"
           >
             <CUI.PopoverTrigger>
               <CUI.Button

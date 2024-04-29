@@ -23,6 +23,12 @@ export type deleteRouteResponse = {
   deleted:string;
   fileName:string;
 } 
+export type SettingsPageReponse = {
+  DP: string;
+  Email:string;
+  UserName:string
+  diskSize: number;
+}
 export type FilesMap = {
   fileType:string;
   fileList:string[];

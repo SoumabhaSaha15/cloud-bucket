@@ -98,7 +98,7 @@ const ROUTES = {
             let  rec = Global.getRecords(await models.UserModel.findById(id));
             if(rec){
               let size = Global.getFolderSize(Global.getUserPath(rec._id));
-              response.send({diskSize:size,Email:rec.Email,UserName:rec.UserName,DP:Global.getDP(rec._id)})
+              response.send({diskSize:size,Email:rec.Email,UserName:rec.UserName,DP:`http://localhost:${process.env.PORT}/client/${rec['_id']}/dp.png`});
             }else{
               throw new Error('user not found');
             }
