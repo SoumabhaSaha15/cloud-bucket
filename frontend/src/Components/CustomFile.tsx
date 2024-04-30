@@ -19,6 +19,7 @@ const CustomFile: React.FC<Link> = (props: Link) => {
   const { isOpen, onToggle, onClose } = CUI.useDisclosure();
   const MODAL = CUI.useDisclosure()
   const toast = CUI.useToast();
+  const [blobData,setBlobData] = React.useState<Blob|null>(null);
   return (
     <>
       <CUI.Box
@@ -157,7 +158,10 @@ const CustomFile: React.FC<Link> = (props: Link) => {
               _hover={{
                 transform: "scale(0.8)",
               }}
-              onClick={onToggle}
+              onClick={async ()=>{
+                onToggle();
+                (!blobData)?setBlobData(await fetch(props.link).then(res=>res.blob())):(()=>{})();
+              }}
               bg={"gray.300"}
               children={
                 <IonIcon
@@ -181,6 +185,22 @@ const CustomFile: React.FC<Link> = (props: Link) => {
                 display={"flex"}
                 gap={"2px"}
               >
+
+                <CUI.Button
+                  _hover={{ color: "#805ad5" }}
+                  children={"type:" + (blobData as Blob)?.type??'' }
+                  disabled={true}
+                  display={"flex"}
+                  justifyContent={"space-between"}
+                />
+                <CUI.Button
+                  _hover={{ color: "#805ad5" }}
+                  children={"size:"+((blobData as Blob)?.size??'unknown') +'bytes' }
+                  disabled={true}
+                  display={"flex"}
+                  justifyContent={"space-between"}
+                />
+
                 <CUI.Button
                   _hover={{ color: "#805ad5" }}
                   onClick={MODAL.onOpen}

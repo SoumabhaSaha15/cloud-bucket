@@ -1,5 +1,5 @@
 import React from "react";
-import IonIcon from "@reacticons/ionicons";
+// import IonIcon from "@reacticons/ionicons";
 import * as CUI from "@chakra-ui/react";
 // import CustomFile from "../Components/CustomFile";
 // import CSP from "../Components/CustomSearchPanel";
@@ -24,8 +24,18 @@ const Settings: React.FC = () => {
   window.onresize = () => {
     Resize_ViewPort();
   };
-  const [dp, steDp] = React.useState<string>('http://localhost:5173/src/assets/react.svg');
-  const [email, setEmail] = React.useState<string>('');
+  const setDirection = (item: string) => {
+    if (parseInt(item.split("px").shift() ?? "") >= 550) {
+      return true;
+    } else {
+      return false;
+    }
+  };
+  const getWidth = (item: string) => parseInt(item.split("px").shift() ?? "");
+  const [dp, steDp] = React.useState<string>(
+    "http://localhost:5173/src/assets/react.svg"
+  );
+  const [email, setEmail] = React.useState<string>("");
   window.onload = async () => {
     const data: CT.SettingsPageReponse | CT.ErrorFileResponse = await fetch(
       "/api" + window.location.pathname,
@@ -48,13 +58,77 @@ const Settings: React.FC = () => {
           alignItems={"center"}
           children={<CustomSettingHeader />}
         />
-        <CUI.Box w={Width} h={'92vh'}>
-          <CUI.Box as="fieldset" placeItems={'center'} w={'100%'}>
-            <CUI.Box as="legend" placeItems={'center'} borderRadius={'10px'} margin={'auto'}  p={'5px'}>
-              <CUI.Image src={dp} maxW={'200px'} borderRadius={'10px'} filter={'drop-shadow(2px 6px 6px black)'}/>
-            </CUI.Box>
-            <CUI.Card>
-              <CUI.CardHeader children={'email : '+email}/>
+        <CUI.Box w={Width} h={"92vh"}>
+          <CUI.Box
+            padding={"5px"}
+            display={"flex"}
+            flexDirection={setDirection(Width) ? "row" : "column"}
+            gap={"5px"}
+            placeItems={"center"}
+            w={"100%"}
+          >
+            <CUI.Image
+              src={dp}
+              maxW={"200px"}
+              borderRadius={"10px"}
+              filter={"drop-shadow(2px 6px 6px black)"}
+            />
+            <CUI.Card
+              maxHeight={"200px"}
+              minHeight={"200px"}
+              padding={'10px'}
+              borderRadius={'10px'}
+              width={
+                setDirection(Width)
+                  ? `calc(${getWidth(Width)}px - 200px)`
+                  : Width
+              }
+              overflow={"hidden"}
+            >
+              <CUI.CardHeader
+                children={
+                  <CUI.Badge children={"User Details"} bgColor={"purple.300"} />
+                }
+                bgColor={'gray.300'}
+              />
+              <CUI.CardBody>
+                <CUI.Box
+                  display={"flex"}
+                  flexDirection={"row"}
+                  alignItems={"center"}
+                >
+                  <CUI.Badge children={"Email"} bgColor={"gray.300"} />
+                  <CUI.Input
+                    value={email}
+                    readOnly={true}
+                    _focus={{
+                      outlineColor: "#00000000 !important",
+                      borderColor: "#00000000 !important",
+                    }}
+                    textAlign={"center"}
+                    textTransform={'uppercase'}
+                    _hover={{ outlineColor: "#00000000 !important" }}
+                  />
+                </CUI.Box>
+                <CUI.Box
+                  display={"flex"}
+                  flexDirection={"row"}
+                  alignItems={"center"}
+                >
+                  <CUI.Badge children={"User Name"} bgColor={"gray.300"} />
+                  <CUI.Input
+                    value={email}
+                    readOnly={true}
+                    _focus={{
+                      outlineColor: "#00000000 !important",
+                      borderColor: "#00000000 !important",
+                    }}
+                    textAlign={"center"}
+                    textTransform={'uppercase'}
+                    _hover={{ outlineColor: "#00000000 !important" }}
+                  />
+                </CUI.Box>
+              </CUI.CardBody>
             </CUI.Card>
           </CUI.Box>
         </CUI.Box>

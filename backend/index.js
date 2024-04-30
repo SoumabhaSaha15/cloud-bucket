@@ -17,7 +17,7 @@ const __dirname = path.dirname(__filename);
     const APP = express();
     await mongoose.connect(process.env.DATABASE_URL);
 
-    APP.use(CORS({origin:['http://localhost:5173']}))
+    APP.use(CORS({origin:[process.env.CORS_URL]}));
     APP.use(express.static(__dirname + '/public'));
     APP.use(express.json());
     APP.use(express.urlencoded({ extended: true }));

@@ -127,7 +127,7 @@ const Files: React.FC = () => {
       }
       
     });
-  }, []);
+  }, [toast]);
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop });
   return (
@@ -161,7 +161,6 @@ const Files: React.FC = () => {
           <CUI.TabPanels
             h={"87vh"}
             overflow={"auto"}
-            filter={isDragActive ? "blur(5px)" : "blur(0px)"}
             children={(tabPanels.length>0)?tabPanels.map((item,index) => (
               <CUI.TabPanel
                 key={crypto.randomUUID()}
@@ -187,31 +186,20 @@ const Files: React.FC = () => {
               />
             )):(<CUI.TabPanel textAlign={'center'} backgroundImage={'url("' + fileSvg + '")'} backgroundPosition={"center center"} backgroundRepeat={"no-repeat"} backgroundSize={"30%"} fontSize={'24px'} h={"87vh"} children={'no files uploaded'}/>)}
           />
-          
-
-
-
-
-
 
           <CUI.Modal isOpen={MODAL.isOpen} onClose={MODAL.onClose}>
             <CUI.ModalOverlay />
             <CUI.ModalContent>
-            <CUI.ModalHeader>{'Search panel'}</CUI.ModalHeader>
-            <CUI.ModalCloseButton />
-            <CUI.ModalBody minHeight={'65vh'} marginY={'10px'} >
-              <CSP links={tabPanels.flat(1)}></CSP>
-            </CUI.ModalBody>
-            <CUI.ModalFooter>
-              <CUI.Button children={'Close'} colorScheme='purple' mr={3} onClick={MODAL.onClose}/>
-            </CUI.ModalFooter>
-          </CUI.ModalContent>
-      </CUI.Modal>
-
-
-
-
-
+              <CUI.ModalHeader>{'Search panel'}</CUI.ModalHeader>
+              <CUI.ModalCloseButton />
+              <CUI.ModalBody minHeight={'65vh'} marginY={'10px'} >
+                <CSP links={tabPanels.flat(1)}></CSP>
+              </CUI.ModalBody>
+              <CUI.ModalFooter>
+                <CUI.Button children={'Close'} colorScheme='purple' mr={3} onClick={MODAL.onClose}/>
+              </CUI.ModalFooter>
+            </CUI.ModalContent>
+          </CUI.Modal>
 
           <CUI.Button
             leftIcon={<IonIcon style={{ fontWeight: "700" }} name="search" />}
