@@ -27,19 +27,22 @@ const UserAuthentication:React.FC<React.PropsWithChildren> = () => {
   const [isLoading,setIsLoading] = React.useState<boolean>(false);
   const [passwordVisibility,setPasswordVisibility] = React.useState<CustomTypes.PASSWORD_VISIBLE_OR_NOT>({IconName:'eye-sharp',InputType:'password'});
   const toast = CUI.useToast();
+  const CM = CUI.useColorMode()
   return (
-  <form 
+  <CUI.Box as="form"
+    bgColor={(CM.colorMode=='dark')?('gray.800'):('white.50')}
     style={{
       width:'min(400px,90vw)',
-      backgroundColor:'white',
       height:form_type.height,
       borderRadius:'10px',
       padding:'10px',
       transition:'all 0.25s ease-in-out',
-      boxShadow:'2px 2px 4px #808080, -2px -2px 4px #808080, -2px 2px 4px #808080, 2px -2px 4px #808080'
+      borderWidth:'1px',
+      borderStyle:'solid'
     }} 
+    borderColor={(CM.colorMode=='dark')?('white.50'):('black.800')}
     name={form_type.formName} 
-    onSubmit={async (e)=>{
+    onSubmit={async (e:React.FormEvent<HTMLFormElement>)=>{
       try{
         e.preventDefault();
         setIsLoading(true);
@@ -54,6 +57,7 @@ const UserAuthentication:React.FC<React.PropsWithChildren> = () => {
             status:'error',
             id:crypto.randomUUID()
           });
+          setIsLoading(false);
         }else{
           window.location.pathname = (data as CustomTypes.AuthPageResponse).redirect;
         }
@@ -226,7 +230,7 @@ const UserAuthentication:React.FC<React.PropsWithChildren> = () => {
         loadingText={'submitting'}
       />
     </CUI.Stack>
-  </form>
+  </CUI.Box>
   )
 }
 export default UserAuthentication;

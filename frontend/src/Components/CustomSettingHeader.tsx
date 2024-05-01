@@ -1,8 +1,6 @@
 import React from "react";
 import * as CUI from  "@chakra-ui/react";
-
 const CustomSettingHeader:React.FC =()=>{
-  
   return(
   <>
     <CUI.Avatar 
@@ -11,6 +9,9 @@ const CustomSettingHeader:React.FC =()=>{
         maxHeight={'6vh'}
         maxWidth={'6vh'}
         aspectRatio={'1/1'}
+        onClick={()=>{
+          window.location.pathname = "/files"
+        }}
       />
       <CUI.Spacer/>
       

@@ -203,7 +203,7 @@ const Files: React.FC = () => {
 
           <CUI.Button
             leftIcon={<IonIcon style={{ fontWeight: "700" }} name="search" />}
-            bg="purple.500"
+            colorScheme="purple"
             style={{
               position: "absolute",
               bottom: "20px",
@@ -227,7 +227,7 @@ const Files: React.FC = () => {
                 leftIcon={
                   <IonIcon style={{ fontWeight: "700" }} name="add-outline" />
                 }
-                bg="purple.500"
+                colorScheme="purple"
                 style={{
                   position: "absolute",
                   bottom: "20px",
@@ -241,7 +241,7 @@ const Files: React.FC = () => {
               />
             </CUI.PopoverTrigger>
             <CUI.Portal>
-              <CUI.PopoverContent bg={'gray.400'} borderRadius={'10px'}>
+              <CUI.PopoverContent borderRadius={'10px'}>
                 <CUI.PopoverArrow bg={'purple.500'} />
                 <CUI.PopoverCloseButton />
                 <CUI.PopoverHeader children={"Close"} />
@@ -250,7 +250,7 @@ const Files: React.FC = () => {
                     {...getRootProps()}
                     minH={"200px"}
                     minW={"200px"}
-                    bg={isDragActive ? "green.300" : "gray.300"}
+                    color={isDragActive ? "green.300" : "gray.300"}
                     textAlign={"center"}
                     placeItems={"center"}
                     border={"2px dashed #805ad5"}

@@ -18,7 +18,6 @@ const CustomSearchPanel:React.FC<Files>=(props:Files)=>{
     style={{display:'block'}} 
     width={'80%'}
     borderRadius={'10px'}
-    bg={'gray.300'}
     position={'absolute'}
     top={'50px'}
     left={'10%'}

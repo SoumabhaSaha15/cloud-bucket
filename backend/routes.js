@@ -170,7 +170,8 @@ const ROUTES = {
      * @param {express.Response} response
      */
     deleteAccount:async(request,response)=>{
-      
+      console.log(request.body);
+      response.send({...request.body,date:Date.now()});
     }
   }
 }

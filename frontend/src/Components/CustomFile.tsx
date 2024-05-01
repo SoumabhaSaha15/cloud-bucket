@@ -9,6 +9,7 @@ type Link = {
   tabNumber:number
 };
 const CustomFile: React.FC<Link> = (props: Link) => {
+  const CM = CUI.useColorMode();
   const badge: string | undefined = props.link.split(".").pop();
   const file_name: string | undefined = props.link.split("/").pop();
   const extensions: string[] = ["jpg", "jpeg", "png", "svg","webp","gif"];
@@ -23,7 +24,6 @@ const CustomFile: React.FC<Link> = (props: Link) => {
   return (
     <>
       <CUI.Box
-        bg={"gray.300"}
         textAlign={"center"}
         position={"relative"}
         display={"grid"}
@@ -32,6 +32,7 @@ const CustomFile: React.FC<Link> = (props: Link) => {
         gridTemplateColumns={"calc(100% - 50px) 50px"}
         gridTemplateRows={"calc(100% - 50px) 50px"}
         gridTemplateAreas={css_grid_area}
+        bgColor={CM.colorMode=='dark'?'gray.700':'gray.400'}
         _hover={{
           fiter: "blur(1px)",
           filter: "brightness(110%)",
@@ -43,7 +44,6 @@ const CustomFile: React.FC<Link> = (props: Link) => {
           top={"10px"}
           left={"10px"}
           color={"purple.500"}
-          bg={"gray.300"}
           fontWeight={"900"}
         />
         <CUI.Box
@@ -56,7 +56,6 @@ const CustomFile: React.FC<Link> = (props: Link) => {
           minHeight={"100%"}
           minWidth={"100%"}
           style={{
-            backgroundColor: bg_image == fileSvg ? "#cbd5e0" : "#000000",
             transition:'all 0.25s ease-in-out'
           }}
           _hover={{
@@ -155,14 +154,15 @@ const CustomFile: React.FC<Link> = (props: Link) => {
               minHeight={"100%"}
               minWidth={"100%"}
               placeItems={"center"}
+              transform={'scale(0.9)'}
               _hover={{
                 transform: "scale(0.8)",
               }}
+              colorScheme={CM.colorMode}
               onClick={async ()=>{
                 onToggle();
                 (!blobData)?setBlobData(await fetch(props.link).then(res=>res.blob())):(()=>{})();
               }}
-              bg={"gray.300"}
               children={
                 <IonIcon
                   style={{
@@ -176,8 +176,8 @@ const CustomFile: React.FC<Link> = (props: Link) => {
             />
           </CUI.PopoverTrigger>
           <CUI.Portal>
-            <CUI.PopoverContent bg="gray.300">
-              <CUI.PopoverArrow bg="purple.500" />
+            <CUI.PopoverContent >
+              <CUI.PopoverArrow />
               <CUI.PopoverCloseButton />
               <CUI.PopoverHeader children={"Close"} />
               <CUI.PopoverFooter
@@ -187,22 +187,25 @@ const CustomFile: React.FC<Link> = (props: Link) => {
               >
 
                 <CUI.Button
-                  _hover={{ color: "#805ad5" }}
-                  children={"type:" + (blobData as Blob)?.type??'' }
+                  colorScheme="purple"
+                  _hover={{ transform:"scale(0.9)" }}
+                  children={"type : " + (blobData as Blob)?.type??'' }
                   disabled={true}
                   display={"flex"}
                   justifyContent={"space-between"}
                 />
                 <CUI.Button
-                  _hover={{ color: "#805ad5" }}
-                  children={"size:"+((blobData as Blob)?.size??'unknown') +'bytes' }
+                  colorScheme="purple"
+                  _hover={{ transform:"scale(0.9)" }}
+                  children={"size : "+((blobData as Blob)?.size??'unknown') +'bytes' }
                   disabled={true}
                   display={"flex"}
                   justifyContent={"space-between"}
                 />
 
                 <CUI.Button
-                  _hover={{ color: "#805ad5" }}
+                  colorScheme="purple"
+                  _hover={{ transform:"scale(0.9)" }}
                   onClick={MODAL.onOpen}
                   rightIcon={<IonIcon name="trash" />}
                   children={"delete"}
@@ -210,7 +213,8 @@ const CustomFile: React.FC<Link> = (props: Link) => {
                   justifyContent={"space-between"}
                 />
                 <CUI.Button
-                  _hover={{ color: "#805ad5" }}
+                  colorScheme="purple"
+                  _hover={{ transform:"scale(0.9)" }}
                   onClick={() => {
                     window.open(props.link);
                   }}
@@ -220,7 +224,8 @@ const CustomFile: React.FC<Link> = (props: Link) => {
                   justifyContent={"space-between"}
                 />
                 <CUI.Button
-                  _hover={{ color: "#805ad5" }}
+                  _hover={{ transform:"scale(0.9)" }}
+                  colorScheme="purple"
                   onClick={()=>{
                     window.navigator.clipboard.writeText(props.link)
                     .then(()=>{
@@ -250,7 +255,8 @@ const CustomFile: React.FC<Link> = (props: Link) => {
                   justifyContent={"space-between"}
                 />
                 <CUI.Button
-                  _hover={{ color: "#805ad5" }}
+                  colorScheme="purple"
+                  _hover={{ transform:"scale(0.9)" }}
                   onClick={async () => {
                     const blob =  await fetch(props.link).then(res=>res.blob());
                     const url = window.URL.createObjectURL(blob);
