@@ -85,9 +85,15 @@ const writeFiles = (buffer,pathId,name) => {
  */
 const getUserPath = (pathId) => (`${__dirname}/public/client/${pathId}/files`);
 /**
+ * get User path by _id
+ * @param {string} pathId 
+ * @returns {string}
+ */
+const getUserFolder = (pathId) => (`${__dirname}/public/client/${pathId}`);
+/**
  * @param {string} path folder path
  * @returns {number}
  */
 const  getFolderSize = (path) => fs.readdirSync(path).map(item=>fs.statSync(path+'/'+item).size).reduce((acc,cur)=>(acc+cur),0);
 
-export default {getRecords,setObjectKeys,parseJWT,CreateFolder,getDP,getFiles,writeFiles,getFolderSize,getUserPath};
+export default {getRecords,setObjectKeys,parseJWT,CreateFolder,getDP,getFiles,writeFiles,getFolderSize,getUserPath,getUserFolder};

@@ -170,8 +170,22 @@ const ROUTES = {
      * @param {express.Response} response
      */
     deleteAccount:async(request,response)=>{
-      console.log(request.body);
-      response.send({...request.body,date:Date.now()});
+      try{
+        let req = Global.setObjectKeys(['UserName','Email','Password'],request.body);
+        const exist =  await models.UserModel.exists(req);
+        if(exist){
+          let records = await models.UserModel.findOne(req);
+          records = Global.getRecords(records);
+          await models.UserModel.deleteOne(records);
+          fs.rmSync(Global.getUserFolder(records['_id']),{recursive:true});
+          response.clearCookie('user_token');
+          response.send({deleted:true,redirect:'user-authentication'});
+        }else{
+          throw new Error('incorrect password')
+        }
+      }catch(e){
+        response.send({err_msg:e.message})
+      }
     }
   }
 }
