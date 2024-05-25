@@ -11,10 +11,7 @@ const Files: React.FC = () => {
   const [dp, setDp] = React.useState<string>("https://bit.ly/sage-adebayo");
   // const [openSearchPanel,setOpenSearchPanel] = React.useState<"none"|"block">("none");
   const [tabs, setTabs] = React.useState<string[]>(["", ""]);
-  const [tabPanels, setTabPanels] = React.useState<Array<Array<string>>>([
-    [""],
-    [""],
-  ]);
+  const [tabPanels, setTabPanels] = React.useState<Array<Array<string>>>([]);
   const { isOpen, onToggle, onClose } = CUI.useDisclosure();
   const MODAL = CUI.useDisclosure();
   window.addEventListener("load", async () => {
